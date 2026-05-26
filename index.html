@@ -237,8 +237,9 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-report-analytics"></i> Findings &amp; Takeaways</span>
-          <div style="display:flex;gap:6px">
-            <span id="analysis-source-label" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);align-self:center"></span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span id="analysis-source-label" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)"></span>
+            <span id="notion-indicator" style="display:none;font-family:'IBM Plex Mono',monospace;font-size:10px;transition:color .3s"></span>
             <button class="btn" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
             <button class="btn" onclick="clearFindings()"><i class="ti ti-trash"></i> Clear</button>
           </div>
@@ -427,6 +428,40 @@ function saveToHistory(entry){
   localStorage.setItem('griffs-history', JSON.stringify(analysisHistory));
   updateHistoryBadge();
   renderHistory();
+  logToNotion(entry);
+}
+
+// ── Log to Notion ──
+async function logToNotion(entry){
+  const indicator = document.getElementById('notion-indicator');
+  try {
+    if(indicator){ indicator.style.display=''; indicator.textContent='⬆ Saving to Notion…'; indicator.style.color='var(--amber)'; }
+    const res = await fetch('/api/notion', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        title: entry.title,
+        findings: entry.text,
+        sourceFile: entry.source || '',
+        type: entry.source && entry.source !== 'Manual query' ? 'File Upload' : 'Manual Query',
+        notes: document.getElementById('griff-notes')?.value || '',
+        date: new Date().toISOString().split('T')[0]
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      if(indicator){ indicator.textContent='✓ Saved to Notion'; indicator.style.color='var(--green)'; }
+      // Store Notion URL on the history entry
+      analysisHistory[0].notionUrl = data.url;
+      localStorage.setItem('griffs-history', JSON.stringify(analysisHistory));
+      renderHistory();
+      setTimeout(()=>{ if(indicator) indicator.style.display='none'; }, 4000);
+    } else {
+      if(indicator){ indicator.textContent='Notion: '+( data.error||'error'); indicator.style.color='var(--red)'; }
+    }
+  } catch(e) {
+    if(indicator){ indicator.textContent='Notion offline'; indicator.style.color='var(--text3)'; }
+  }
 }
 
 function updateHistoryBadge(){
@@ -458,6 +493,7 @@ function renderHistory(){
           <div class="history-entry-meta">
             <span>${h.date}</span>
             <span>${h.source||'Manual'}</span>
+            ${h.notionUrl?`<a href="${h.notionUrl}" target="_blank" style="color:var(--purple);font-family:'IBM Plex Mono',monospace;font-size:10px;text-decoration:none">↗ Notion</a>`:''}
             ${h.followups?`<span>${h.followups} follow-up${h.followups>1?'s':''}</span>`:''}
           </div>
         </div>
