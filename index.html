@@ -15,7 +15,6 @@
 html{-webkit-font-smoothing:antialiased}
 body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
-
 :root{
   --cyan:#29b6d8;--cyan-dim:rgba(41,182,216,.10);--cyan-border:rgba(41,182,216,.35);
   --green:#16a34a;--green-dim:rgba(22,163,74,.10);--green-border:rgba(22,163,74,.30);
@@ -27,44 +26,33 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
   --text:#111;--text2:#3d3d3d;--text3:#888;
   --r:8px;--rlg:10px;--rsm:4px;
 }
-
 .shell{display:flex;min-height:100vh}
 .sidebar{width:220px;flex-shrink:0;background:var(--nav);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:1px 0 4px rgba(0,0,0,.05)}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
-
 .sb-logo{padding:0 20px 20px;border-bottom:2px solid var(--cyan);margin-bottom:16px}
 .sb-icon{width:32px;height:32px;background:var(--cyan);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#111;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
 .sb-app{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);line-height:1}
 .sb-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--cyan);margin-top:3px;letter-spacing:.06em;text-transform:uppercase}
-
 .sb-section{padding:0 12px;margin-bottom:6px}
 .sb-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:4px;margin-top:12px}
-
 .nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--rsm);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;border:1px solid transparent;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .nav-item i{font-size:16px;flex-shrink:0}
 .nav-item:hover{background:var(--surface);color:var(--text)}
 .nav-item.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
-
+.nav-badge{margin-left:auto;background:var(--cyan);color:#111;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
 .sb-footer{margin-top:auto;padding:14px 20px;border-top:1px solid var(--border)}
 .sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Barlow Condensed',sans-serif;flex-shrink:0}
-.sb-uname{font-weight:600;color:var(--text2);font-size:11px}
-.sb-urole{color:var(--text3);font-size:9px;font-family:'IBM Plex Mono',monospace}
-
 .topbar{background:var(--nav);border-bottom:2px solid var(--cyan);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
 .tb-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)}
 .tb-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)}
-
 .content{flex:1;overflow-y:auto;padding:24px 28px}
 .section{display:none}.section.active{display:block}
-
 .btn{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:7px 14px;border-radius:var(--rsm);border:1px solid var(--border-md);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{background:var(--surface);color:var(--text)}
 .btn i{font-size:13px}
 .btn-primary{background:var(--cyan);color:#111;border-color:var(--cyan);font-weight:700}
 .btn-primary:hover{background:#22a0c2;border-color:#22a0c2}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-danger{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
-
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
 .kpi{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--cyan);border-radius:var(--rlg);padding:14px}
 .kpi.pos{border-top-color:var(--green)}.kpi.neg{border-top-color:var(--red)}.kpi.warn{border-top-color:var(--amber)}
@@ -72,77 +60,54 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
 .kpi-value{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;line-height:1;color:var(--text);margin-bottom:4px}
 .kpi-delta{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
 .kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}
-
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .card-header{padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);display:flex;align-items:center;gap:7px}
 .card-title i{font-size:15px;color:var(--cyan)}
 .card-body{padding:18px}
-
 .prompt-wrap{border:1px solid var(--border-md);border-radius:var(--r);overflow:hidden;margin-bottom:10px;transition:border-color .15s}
 .prompt-wrap:focus-within{border-color:var(--cyan)}
 .prompt-wrap textarea{width:100%;display:block;background:transparent;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);resize:none;padding:11px 14px;min-height:68px;line-height:1.6}
 .prompt-wrap textarea::placeholder{color:var(--text3)}
 .prompt-footer{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--surface);border-top:1px solid var(--border)}
-
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .chip{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);border:1px solid var(--border-md);background:var(--surface);padding:4px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;transition:all .12s}
 .chip:hover{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
-
-.findings-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--text3);min-height:90px;line-height:1.8;white-space:pre-wrap;font-family:'Inter',sans-serif}
-.findings-box.live{color:var(--text2)}
-
+.findings-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--text2);min-height:90px;line-height:1.8;white-space:pre-wrap;font-family:'Inter',sans-serif}
 .notes-area{width:100%;background:transparent;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);resize:vertical;min-height:90px;line-height:1.7}
 .notes-area::placeholder{color:var(--text3)}
-
+.followup-wrap{border:1px solid var(--cyan-border);border-radius:var(--r);overflow:hidden;background:var(--cyan-dim);margin-top:12px}
+.followup-wrap textarea{width:100%;display:block;background:transparent;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);resize:none;padding:10px 14px;min-height:52px;line-height:1.6}
+.followup-wrap textarea::placeholder{color:var(--text3)}
+.followup-footer{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(41,182,216,.08);border-top:1px solid var(--cyan-border)}
+.followup-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--cyan)}
 .dl-table{width:100%;border-collapse:collapse}
 .dl-table th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#111;background:#29b6d8;padding:8px 12px;white-space:nowrap}
 .dl-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:12.5px;color:var(--text2)}
 .dl-table tr:last-child td{border-bottom:none}
 .dl-table tr:hover td{background:var(--surface)}
 .num{font-family:'IBM Plex Mono',monospace;font-size:12px}
-
 .bar-wrap{display:flex;align-items:center;gap:8px}
 .bar-track{width:64px;height:4px;background:var(--well);border-radius:2px;overflow:hidden}
 .bar-fill{height:4px;border-radius:2px;transition:width .5s ease}
 .bar-pct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
-
 .pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;border:1px solid;white-space:nowrap}
 .pill-green{background:var(--green-dim);color:#0f6e36;border-color:var(--green-border)}
 .pill-amber{background:var(--amber-dim);color:#854f0b;border-color:var(--amber-border)}
 .pill-red{background:var(--red-dim);color:#991b1b;border-color:var(--red-border)}
 .pill-cyan{background:var(--cyan-dim);color:#0e7490;border-color:var(--cyan-border)}
-
 .upload-zone{border:2px dashed var(--border-md);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .upload-zone:hover,.upload-zone.drag{border-color:var(--cyan);background:var(--cyan-dim)}
 .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-zone-icon{font-size:32px;color:var(--text3);margin-bottom:8px}
 .upload-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:4px}
 .upload-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
-
 .file-badge{display:none;background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--rsm);padding:8px 14px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green);align-items:center;gap:8px}
 .file-badge.show{display:flex}
-
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.15);border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .alert-card{background:var(--red-dim);border:1px solid var(--red-border);border-radius:var(--r);padding:12px 16px;margin-bottom:12px}
 .alert-title{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.alert-title i{font-size:14px}
-
-.standup-empty{text-align:center;padding:3.5rem 2rem}
-.standup-empty i{font-size:44px;color:var(--text3);display:block;margin-bottom:14px;opacity:.3}
-.standup-empty h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:8px}
-.standup-empty p{font-size:13px;color:var(--text3);max-width:340px;margin:0 auto 20px;line-height:1.7}
-
-.history-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
-.history-item:last-child{border-bottom:none}
-.h-icon{width:32px;height:32px;border-radius:var(--rsm);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.h-icon i{font-size:16px;color:var(--cyan)}
-.h-title{font-size:12.5px;font-weight:600;color:var(--text)}
-.h-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-top:2px}
-.h-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;flex-shrink:0;padding-top:2px}
-
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);padding:14px 16px}
 .chart-card-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:12px}
@@ -150,8 +115,21 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
 .legend-item{display:flex;align-items:center;gap:5px}
 .legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 
-.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.sl::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ── History entries ── */
+.history-entry{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);margin-bottom:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.history-entry-header{padding:12px 18px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+.history-entry-header:hover{background:var(--well)}
+.history-entry-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text)}
+.history-entry-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);display:flex;align-items:center;gap:10px}
+.history-entry-body{display:none;padding:16px 18px}
+.history-entry-body.open{display:block}
+.history-entry-text{font-size:13px;color:var(--text2);white-space:pre-wrap;line-height:1.8;font-family:'Inter',sans-serif}
+.history-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;border:1px solid}
+
+.standup-empty{text-align:center;padding:3.5rem 2rem}
+.standup-empty i{font-size:44px;color:var(--text3);display:block;margin-bottom:14px;opacity:.3}
+.standup-empty h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:8px}
+.standup-empty p{font-size:13px;color:var(--text3);max-width:340px;margin:0 auto 20px;line-height:1.7}
 
 #toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 16px;border-radius:var(--rsm);opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;z-index:999;letter-spacing:.02em}
 #toast.show{opacity:1;transform:translateY(0)}
@@ -161,7 +139,6 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
 .section.active>*:nth-child(2){animation-delay:.04s}
 .section.active>*:nth-child(3){animation-delay:.08s}
 .section.active>*:nth-child(4){animation-delay:.12s}
-.section.active>*:nth-child(5){animation-delay:.16s}
 @media(max-width:768px){.sidebar{display:none}.content{padding:16px}.chart-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -183,7 +160,7 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
     <button class="nav-item active" onclick="switchTab('analysis',this)"><i class="ti ti-chart-bar"></i> Analysis</button>
     <button class="nav-item" onclick="switchTab('upload',this)"><i class="ti ti-table-import"></i> Data Upload</button>
     <button class="nav-item" onclick="switchTab('standup',this)"><i class="ti ti-presentation-analytics"></i> QM Standups</button>
-    <button class="nav-item" onclick="switchTab('history',this)"><i class="ti ti-history"></i> History</button>
+    <button class="nav-item" onclick="switchTab('history',this)"><i class="ti ti-history"></i> History <span class="nav-badge" id="history-badge" style="display:none">0</span></button>
     <div class="sb-label" style="margin-top:14px">Quick Actions</div>
     <button class="nav-item" onclick="loadPingFindings()"><i class="ti ti-database-import"></i> Load Ping Findings</button>
     <button class="nav-item" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
@@ -192,8 +169,8 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
     <div style="display:flex;align-items:center;gap:9px">
       <div class="sb-avatar">GH</div>
       <div>
-        <div class="sb-uname">Griff</div>
-        <div class="sb-urole">Media Analyst · QM</div>
+        <div style="font-weight:600;color:var(--text2);font-size:11px">Griff</div>
+        <div style="color:var(--text3);font-size:9px;font-family:'IBM Plex Mono',monospace">Media Analyst · QM</div>
       </div>
     </div>
   </div>
@@ -210,10 +187,10 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
 
   <div class="content">
 
-    <!-- ══ ANALYSIS TAB ══ -->
+    <!-- ══════════ ANALYSIS TAB ══════════ -->
     <div class="section active" id="tab-analysis">
 
-      <div class="kpi-row">
+      <div class="kpi-row" id="kpi-row">
         <div class="kpi neg">
           <div class="kpi-label">Total Pings</div>
           <div class="kpi-value" id="m-pings">3.81M</div>
@@ -236,19 +213,15 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
         </div>
       </div>
 
-      <!-- Alert -->
-      <div class="alert-card">
+      <div class="alert-card" id="analysis-alert">
         <div class="alert-title"><i class="ti ti-alert-triangle"></i> Active Issue — BF algorithm not enforcing bid frequency settings</div>
-        <div style="font-size:12.5px;color:#7f1d1d;line-height:1.7">Every source with BF &gt; 0 is bidding far below its setting. This is a platform-level enforcement failure, not a per-source issue. The random number feature is not aligning with BF. Across 3.8M pings, 1.24M calls that should have been bid were not.</div>
+        <div style="font-size:12.5px;color:#7f1d1d;line-height:1.7" id="alert-body">Every source with BF > 0 is bidding far below its setting. This is a platform-level enforcement failure, not a per-source issue. The random number feature is not aligning with BF. Across 3.8M pings, 1.24M calls that should have been bid were not.</div>
       </div>
 
-      <!-- Charts -->
-      <div class="chart-grid">
+      <div class="chart-grid" id="chart-area">
         <div class="chart-card">
           <div class="chart-card-title">BF setting vs actual bid rate by source</div>
-          <div style="position:relative;height:300px">
-            <canvas id="chart-bf" role="img" aria-label="Horizontal bar chart comparing BF setting vs actual bid rate. All sources show actual far below BF.">All sources bid far below BF settings.</canvas>
-          </div>
+          <div style="position:relative;height:300px"><canvas id="chart-bf"></canvas></div>
           <div class="legend">
             <span class="legend-item"><span class="legend-swatch" style="background:#B5D4F4"></span>BF setting</span>
             <span class="legend-item"><span class="legend-swatch" style="background:#E24B4A"></span>Actual bid rate</span>
@@ -256,16 +229,37 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
         </div>
         <div class="chart-card">
           <div class="chart-card-title">Calls missed by source (top 10)</div>
-          <div style="position:relative;height:300px">
-            <canvas id="chart-missed" role="img" aria-label="Bar chart of calls missed. RATEQ 421K, WISDO 246K, ADLNT 175K.">RATEQ leads with 421K missed calls.</canvas>
+          <div style="position:relative;height:300px"><canvas id="chart-missed"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Main findings -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="ti ti-report-analytics"></i> Findings &amp; Takeaways</span>
+          <div style="display:flex;gap:6px">
+            <span id="analysis-source-label" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);align-self:center"></span>
+            <button class="btn" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
+            <button class="btn" onclick="clearFindings()"><i class="ti ti-trash"></i> Clear</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="findings-box" id="findings-display">Loading ping analysis findings...</div>
+          <!-- Follow-up instructions -->
+          <div class="followup-wrap" id="followup-area" style="display:none">
+            <textarea id="followup-input" placeholder="Add a follow-up instruction — e.g. 'Now break this down by state' or 'Focus on ADLNT specifically'…"></textarea>
+            <div class="followup-footer">
+              <span class="followup-label"><i class="ti ti-corner-down-right" style="font-size:12px;margin-right:4px"></i>Follow-up on this analysis</span>
+              <button class="btn btn-primary" onclick="runFollowUp()" id="followup-btn"><i class="ti ti-send"></i> Send</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- AI Prompt -->
+      <!-- Add instruction prompt -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title"><i class="ti ti-brain"></i> Run Analysis with Claude</span>
+          <span class="card-title"><i class="ti ti-brain"></i> Run New Analysis with Claude</span>
           <span id="api-status" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green)">● Live</span>
         </div>
         <div class="card-body">
@@ -277,26 +271,12 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
             <button class="chip" onclick="setPrompt('Analyze the difference between sources where the algo is closest to working vs worst performers. ')">Best vs worst</button>
           </div>
           <div class="prompt-wrap">
-            <textarea id="analysis-input" placeholder="Ask a question about the QM media data or BF analysis…" oninput="updateCharCount()"></textarea>
+            <textarea id="analysis-input" placeholder="Ask a question or give new instructions…" oninput="updateCharCount()"></textarea>
             <div class="prompt-footer">
               <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)" id="char-count">0 chars</span>
               <button class="btn btn-primary" id="run-btn" onclick="runAnalysis()"><i class="ti ti-player-play"></i> Run Analysis</button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Findings -->
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title"><i class="ti ti-report-analytics"></i> Findings &amp; Takeaways</span>
-          <div style="display:flex;gap:6px">
-            <button class="btn" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
-            <button class="btn" onclick="clearFindings()"><i class="ti ti-trash"></i> Clear</button>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="findings-box live" id="findings-display">Loading ping analysis findings...</div>
         </div>
       </div>
 
@@ -310,7 +290,7 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
           </div>
         </div>
         <div class="card-body">
-          <textarea class="notes-area" id="griff-notes" placeholder="Add context, flags, or recommendations here. These carry into standup reports."></textarea>
+          <textarea class="notes-area" id="griff-notes" placeholder="Add context, flags, or recommendations. These carry into standup reports."></textarea>
           <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:10px">
             <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em" id="notes-status">Unsaved</span>
           </div>
@@ -323,25 +303,22 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
           <span class="card-title"><i class="ti ti-table"></i> Source Breakdown — BF Compliance</span>
         </div>
         <div style="overflow-x:auto">
-          <table class="dl-table" id="source-table">
-            <thead><tr>
-              <th>Source</th><th>BF Setting</th><th>Pings</th><th>Exp. Bids</th><th>Actual Bids</th><th>Actual Rate</th><th>Gap</th><th>Calls Missed</th><th>Severity</th>
-            </tr></thead>
-            <tbody id="source-tbody"></tbody>
-          </table>
+          <table class="dl-table"><thead><tr>
+            <th>Source</th><th>BF Setting</th><th>Pings</th><th>Exp. Bids</th><th>Actual Bids</th><th>Actual Rate</th><th>Gap</th><th>Calls Missed</th><th>Severity</th>
+          </tr></thead><tbody id="source-tbody"></tbody></table>
         </div>
       </div>
 
     </div><!-- /analysis -->
 
-    <!-- ══ DATA UPLOAD TAB ══ -->
+    <!-- ══════════ DATA UPLOAD TAB ══════════ -->
     <div class="section" id="tab-upload">
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-table-import"></i> Upload Media Data</span>
         </div>
         <div class="card-body">
-          <p style="font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.7">Upload an Excel (.xlsx) or CSV file. Give Claude instructions and get analysis back in text — including charts and data callouts where the data warrants it.</p>
+          <p style="font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.7">Upload an Excel (.xlsx) or CSV file. Give Claude your instructions — findings will appear in the <strong>Analysis tab</strong> with charts where the data warrants it, and saved to History automatically.</p>
           <div class="upload-zone" id="upload-zone" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
             <input type="file" accept=".xlsx,.xls,.csv" id="file-input" onchange="handleFile(event)">
             <div class="upload-zone-icon"><i class="ti ti-file-spreadsheet"></i></div>
@@ -351,7 +328,6 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
           <div class="file-badge" id="upload-badge"><i class="ti ti-circle-check" style="font-size:16px"></i><span id="upload-filename">file loaded</span></div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-message-dots"></i> Analysis Instructions</span>
@@ -372,55 +348,51 @@ body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px
           </div>
         </div>
       </div>
-
-      <div class="card" id="upload-results-card" style="display:none">
+      <!-- Preview of last result in upload tab -->
+      <div class="card" id="upload-preview-card" style="display:none">
         <div class="card-header">
-          <span class="card-title"><i class="ti ti-report-analytics"></i> Analysis Results</span>
-          <button class="btn" onclick="pushUploadToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
+          <span class="card-title"><i class="ti ti-check"></i> Last Analysis Complete</span>
+          <button class="btn btn-primary" onclick="switchTab('analysis', document.querySelector('.nav-item'))"><i class="ti ti-arrow-right"></i> View in Analysis Tab</button>
         </div>
-        <div class="card-body">
-          <div class="findings-box live" id="upload-findings"></div>
+        <div class="card-body" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green);padding:12px 18px">
+          ✓ Results are now showing in the Analysis tab with graphical view. History has been updated.
         </div>
       </div>
     </div><!-- /upload -->
 
-    <!-- ══ STANDUPS TAB ══ -->
+    <!-- ══════════ STANDUPS TAB ══════════ -->
     <div class="section" id="tab-standup">
       <div class="card" id="standup-content-card" style="display:none">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-notes"></i> This Week's Notes</span>
           <button class="btn" onclick="window.print()"><i class="ti ti-printer"></i> Print / Share</button>
         </div>
-        <div class="card-body">
-          <div class="findings-box live" id="standup-content"></div>
-        </div>
+        <div class="card-body"><div class="findings-box" id="standup-content"></div></div>
       </div>
       <div class="card">
         <div class="standup-empty">
           <i class="ti ti-presentation-analytics"></i>
           <h3>QM Weekly Standup</h3>
           <p>This section is reserved for Griff to configure. Tell us the layout, metrics, and talking points you want for the weekly QM team call and we'll build it out.</p>
-          <button class="btn btn-primary" onclick="alert('Tell us what you want in the standup view — metrics, format, talking points — and we will build it.')"><i class="ti ti-plus"></i> Build Standup View</button>
+          <button class="btn btn-primary" onclick="alert('Tell us what you want in the standup view and we will build it.')"><i class="ti ti-plus"></i> Build Standup View</button>
         </div>
       </div>
     </div><!-- /standup -->
 
-    <!-- ══ HISTORY TAB ══ -->
+    <!-- ══════════ HISTORY TAB ══════════ -->
     <div class="section" id="tab-history">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title"><i class="ti ti-history"></i> Saved Analyses</span>
-        </div>
-        <div class="card-body" id="history-list">
-          <p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No saved analyses yet. Run an analysis and save your notes to build history here.</p>
-        </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text)">Analysis History</div>
+        <button class="btn" onclick="clearHistory()"><i class="ti ti-trash"></i> Clear All</button>
+      </div>
+      <div id="history-list">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);padding:2rem;text-align:center;font-size:13px;color:var(--text3)">No saved analyses yet. Run an analysis to start building history.</div>
       </div>
     </div><!-- /history -->
 
-  </div>
-</div>
-</div>
-
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
 <div id="toast"></div>
 
 <script>
@@ -434,68 +406,170 @@ function switchTab(t,btn){
   TABS.forEach(id=>document.getElementById('tab-'+id).classList.toggle('active',id===t));
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.nav-item')[TABS.indexOf(t)]?.classList.add('active');
   document.getElementById('page-title').textContent=TITLES[t]||t;
 }
 
-// ── Char count ──
 function updateCharCount(){
   document.getElementById('char-count').textContent=document.getElementById('analysis-input').value.length+' chars';
 }
-
-// ── Chips ──
 function setPrompt(t){const ta=document.getElementById('analysis-input');ta.value=t;ta.focus();updateCharCount();}
 function setUploadPrompt(t){document.getElementById('upload-instructions').value=t;document.getElementById('upload-instructions').focus();}
 
-// ── Analysis history ──
-let analysisHistory=[];
-let uploadedFileData=null;
-let uploadedFileName=null;
+// ── History (persisted in localStorage) ──
+let analysisHistory = JSON.parse(localStorage.getItem('griffs-history')||'[]');
+updateHistoryBadge();
+renderHistory();
 
-// ── Call Claude API ──
+function saveToHistory(entry){
+  analysisHistory.unshift(entry);
+  if(analysisHistory.length>50) analysisHistory=analysisHistory.slice(0,50);
+  localStorage.setItem('griffs-history', JSON.stringify(analysisHistory));
+  updateHistoryBadge();
+  renderHistory();
+}
+
+function updateHistoryBadge(){
+  const badge=document.getElementById('history-badge');
+  if(analysisHistory.length>0){badge.style.display='';badge.textContent=analysisHistory.length;}
+  else{badge.style.display='none';}
+}
+
+function clearHistory(){
+  if(!confirm('Clear all analysis history?')) return;
+  analysisHistory=[];
+  localStorage.removeItem('griffs-history');
+  updateHistoryBadge();
+  renderHistory();
+  toast('History cleared');
+}
+
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!analysisHistory.length){
+    el.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);padding:2rem;text-align:center;font-size:13px;color:var(--text3)">No saved analyses yet. Run an analysis to start building history.</div>';
+    return;
+  }
+  el.innerHTML=analysisHistory.map((h,i)=>`
+    <div class="history-entry">
+      <div class="history-entry-header" onclick="toggleHistory(${i})">
+        <div>
+          <div class="history-entry-title">${h.title}</div>
+          <div class="history-entry-meta">
+            <span>${h.date}</span>
+            <span>${h.source||'Manual'}</span>
+            ${h.followups?`<span>${h.followups} follow-up${h.followups>1?'s':''}</span>`:''}
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn" style="padding:4px 10px" onclick="event.stopPropagation();restoreAnalysis(${i})"><i class="ti ti-arrow-back-up"></i> Restore</button>
+          <i class="ti ti-chevron-down" style="color:var(--text3);font-size:16px" id="hist-icon-${i}"></i>
+        </div>
+      </div>
+      <div class="history-entry-body" id="hist-body-${i}">
+        <div class="history-entry-text">${h.text}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleHistory(i){
+  const body=document.getElementById('hist-body-'+i);
+  const icon=document.getElementById('hist-icon-'+i);
+  body.classList.toggle('open');
+  icon.className=body.classList.contains('open')?'ti ti-chevron-up':'ti ti-chevron-down';
+  icon.style.color='var(--text3)';
+  icon.style.fontSize='16px';
+}
+
+function restoreAnalysis(i){
+  const h=analysisHistory[i];
+  document.getElementById('findings-display').textContent=h.text;
+  document.getElementById('followup-area').style.display='';
+  document.getElementById('analysis-source-label').textContent=h.source?'Source: '+h.source:'';
+  switchTab('analysis');
+  toast('Analysis restored');
+}
+
+// ── Call Claude ──
 async function callClaude(prompt, data=null){
-  const res = await fetch('/api/analyze', {
+  const res=await fetch('/api/analyze',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({prompt, data})
+    body:JSON.stringify({prompt,data})
   });
-  if(!res.ok){
-    const err = await res.json().catch(()=>({error:'Server error'}));
-    throw new Error(err.error||'API error');
-  }
-  const json = await res.json();
+  if(!res.ok){const err=await res.json().catch(()=>({error:'Server error'}));throw new Error(err.error||'API error');}
+  const json=await res.json();
   return json.text;
 }
 
-// ── Run analysis ──
+// ── Run analysis (manual prompt) ──
+let currentAnalysisContext = '';
 async function runAnalysis(){
   const val=document.getElementById('analysis-input').value.trim();
   if(!val){toast('Enter a prompt first');return;}
   const notes=document.getElementById('griff-notes').value.trim();
-  const fullPrompt = val + (notes?'\n\nGriff context:\n'+notes:'');
+  const fullPrompt=val+(notes?'\n\nGriff context:\n'+notes:'');
   const btn=document.getElementById('run-btn');
   const box=document.getElementById('findings-display');
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> Analyzing…';
   box.textContent='Analyzing…';
-  box.classList.add('live');
   try{
-    const text = await callClaude(fullPrompt);
+    const text=await callClaude(fullPrompt);
     box.textContent=text;
-    toast('Analysis complete');
-    const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    analysisHistory.unshift({title:val.slice(0,70)+(val.length>70?'…':''),date:today,full:text});
-    renderHistory();
+    currentAnalysisContext=text;
+    document.getElementById('followup-area').style.display='';
+    document.getElementById('analysis-source-label').textContent='';
+    const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    saveToHistory({title:val.slice(0,70)+(val.length>70?'…':''),date:today,text,source:'Manual query'});
+    toast('Analysis complete — saved to history');
   }catch(e){
-    box.textContent='Error: '+e.message+'\n\nMake sure ANTHROPIC_API_KEY is set in Vercel environment variables.';
-    toast('Error — check API key config');
+    box.textContent='Error: '+e.message;
+    toast('Error — check console');
   }finally{
     btn.disabled=false;
     btn.innerHTML='<i class="ti ti-player-play"></i> Run Analysis';
   }
 }
 
-// ── Upload file ──
+// ── Follow-up instruction ──
+async function runFollowUp(){
+  const val=document.getElementById('followup-input').value.trim();
+  if(!val){toast('Enter a follow-up instruction');return;}
+  const btn=document.getElementById('followup-btn');
+  const box=document.getElementById('findings-display');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span>';
+  const fullPrompt=`Previous analysis:\n${currentAnalysisContext}\n\nFollow-up instruction: ${val}`;
+  try{
+    const text=await callClaude(fullPrompt);
+    box.textContent=text;
+    currentAnalysisContext=text;
+    document.getElementById('followup-input').value='';
+    const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    // Update existing history entry with follow-up count or add new
+    const lastEntry=analysisHistory[0];
+    if(lastEntry){lastEntry.followups=(lastEntry.followups||0)+1;lastEntry.text=text;localStorage.setItem('griffs-history',JSON.stringify(analysisHistory));renderHistory();}
+    toast('Follow-up complete');
+  }catch(e){
+    toast('Error: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-send"></i> Send';
+  }
+}
+
+function clearFindings(){
+  document.getElementById('findings-display').textContent='Run a query above to populate findings.';
+  document.getElementById('followup-area').style.display='none';
+  document.getElementById('analysis-source-label').textContent='';
+  currentAnalysisContext='';
+}
+
+// ── File upload ──
 let uploadedFile=null;
+let uploadedFileData=null;
+
 function handleDrag(e){e.preventDefault();document.getElementById('upload-zone').classList.add('drag');}
 function handleDragLeave(){document.getElementById('upload-zone').classList.remove('drag');}
 function handleDrop(e){e.preventDefault();document.getElementById('upload-zone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)processFile(f);}
@@ -503,12 +577,10 @@ function handleFile(e){const f=e.target.files[0];if(f)processFile(f);}
 
 function processFile(file){
   uploadedFile=file;
-  const badge=document.getElementById('upload-badge');
   document.getElementById('upload-filename').textContent=file.name+' — '+(file.size/1024).toFixed(1)+' KB';
-  badge.classList.add('show');
+  document.getElementById('upload-badge').classList.add('show');
   document.getElementById('file-status').textContent=file.name+' ready';
   toast('File loaded: '+file.name);
-
   const reader=new FileReader();
   reader.onload=function(e){
     try{
@@ -520,33 +592,50 @@ function processFile(file){
         csvData+='Sheet: '+name+'\n'+XLSX.utils.sheet_to_csv(ws).split('\n').slice(0,100).join('\n')+'\n\n';
       });
       uploadedFileData=csvData;
-      uploadedFileName=file.name;
-    }catch(err){
-      uploadedFileData='Could not parse file: '+err.message;
-    }
+    }catch(err){uploadedFileData='Could not parse: '+err.message;}
   };
   reader.readAsArrayBuffer(file);
 }
 
 async function runUploadAnalysis(){
   if(!uploadedFile){toast('Upload a file first');return;}
-  if(!uploadedFileData){toast('File still loading, try again');return;}
+  if(!uploadedFileData){toast('File still loading, try again in a moment');return;}
   const instr=document.getElementById('upload-instructions').value.trim();
   if(!instr){toast('Add instructions first');return;}
   const btn=document.getElementById('upload-run-btn');
-  const card=document.getElementById('upload-results-card');
-  const box=document.getElementById('upload-findings');
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> Analyzing…';
-  card.style.display='';
-  box.textContent='Analyzing your data…';
+
+  // Show loading in analysis tab
+  document.getElementById('findings-display').textContent='Analyzing '+uploadedFile.name+'…';
+  document.getElementById('analysis-source-label').textContent='Source: '+uploadedFile.name;
+
   try{
     const text=await callClaude(instr, uploadedFileData);
-    box.textContent=text;
-    toast('Analysis complete');
+
+    // ── Put findings in Analysis tab ──
+    document.getElementById('findings-display').textContent=text;
+    currentAnalysisContext=text;
+    document.getElementById('followup-area').style.display='';
+
+    // ── Save to history ──
+    const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    saveToHistory({
+      title:instr.slice(0,70)+(instr.length>70?'…':''),
+      date:today,
+      text,
+      source:uploadedFile.name
+    });
+
+    // ── Show success in upload tab + switch to analysis ──
+    document.getElementById('upload-preview-card').style.display='';
+    switchTab('analysis', document.querySelectorAll('.nav-item')[0]);
+    toast('Analysis complete — results in Analysis tab');
+
   }catch(e){
-    box.textContent='Error: '+e.message;
-    toast('Error — check API key config');
+    document.getElementById('findings-display').textContent='Error: '+e.message;
+    switchTab('analysis', document.querySelectorAll('.nav-item')[0]);
+    toast('Error — check API config');
   }finally{
     btn.disabled=false;
     btn.innerHTML='<i class="ti ti-player-play"></i> Analyze File';
@@ -559,53 +648,23 @@ function saveNotes(){
   if(!notes){toast('Nothing to save');return;}
   const ts=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
   document.getElementById('notes-status').textContent='Saved at '+ts;
-  const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  analysisHistory.unshift({title:notes.slice(0,72)+(notes.length>72?'…':''),date:today,full:notes});
-  renderHistory();
   toast('Notes saved');
-}
-
-function clearFindings(){
-  document.getElementById('findings-display').textContent='Run a query above to populate findings.';
-  document.getElementById('findings-display').classList.remove('live');
 }
 
 function pushToStandup(){
   const findings=document.getElementById('findings-display').textContent;
   const notes=document.getElementById('griff-notes').value.trim();
-  const content=(findings&&findings!=='Run a query above to populate findings.'?findings:'')+(notes?'\n\nGriff notes:\n'+notes:'');
-  if(!content.trim()){toast('Nothing to push — run an analysis or add notes first');return;}
-  document.getElementById('standup-content').textContent=content;
-  document.getElementById('standup-content-card').style.display='';
-  switchTab('standup');
-  document.querySelectorAll('.nav-item')[2].classList.add('active');
-  document.querySelectorAll('.nav-item')[0].classList.remove('active');
-  toast('Pushed to standup ↗');
-}
-
-function pushUploadToStandup(){
-  const content=document.getElementById('upload-findings').textContent;
-  if(!content){toast('No results yet');return;}
+  const content=[findings,notes?'Griff notes:\n'+notes:''].filter(Boolean).join('\n\n');
+  if(!content.trim()||content==='Run a query above to populate findings.'){toast('Nothing to push — run an analysis first');return;}
   document.getElementById('standup-content').textContent=content;
   document.getElementById('standup-content-card').style.display='';
   switchTab('standup');
   toast('Pushed to standup ↗');
 }
 
-function renderHistory(){
-  const el=document.getElementById('history-list');
-  if(!analysisHistory.length){el.innerHTML='<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No saved analyses yet.</p>';return;}
-  el.innerHTML=analysisHistory.map(h=>`
-    <div class="history-item">
-      <div class="h-icon"><i class="ti ti-chart-line"></i></div>
-      <div><div class="h-title">${h.title}</div><div class="h-meta">Saved analysis</div></div>
-      <div class="h-date">${h.date}</div>
-    </div>`).join('');
-}
-
-// ── Ping findings pre-load ──
+// ── Ping findings ──
 function loadPingFindings(){
-  const findings=`PING ANALYSIS — BF COMPLIANCE REPORT
+  const text=`PING ANALYSIS — BF COMPLIANCE REPORT
 Generated: ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
 
 EXECUTIVE SUMMARY
@@ -618,38 +677,71 @@ KEY FINDINGS
    Calls missed: 1,236,122 (73.1% of what BF settings mandated)
 
 2. RATEQ — Largest absolute miss (420,969 calls)
-   BF setting: 46% | Actual bid rate: 6.0% | Gap: 40 points
-   At 1.55M pings, even a moderate BF gap compounds to massive volume loss.
+   BF setting: 46% → Actual bid rate: 6.0% | Gap: 40 points
 
 3. ADLNT — Worst rate gap among high-volume sources (69 points)
-   BF setting: 78% | Actual bid rate: 8.6% | Gap: 69 points
-   278K pings × 69-point gap = 174,760 missed calls.
+   BF setting: 78% → Actual bid rate: 8.6% | 174,760 missed calls
 
 4. WISDO — Second largest absolute miss (245,510 calls)
-   BF setting: 51% | Actual bid rate: 6.8% | Gap: 45 points
+   BF setting: 51% → Actual bid rate: 6.8% | Gap: 45 points
 
-5. VPMOP & HLTHC — Critical gap percentage (71% and 73%)
-   Lower volume but highest rate gaps — nearly no bidding despite BF settings.
-
-6. SKYLB — Only source performing at a reasonable level
-   BF: 69% | Actual: 40.4% — still a gap but the closest to working correctly.
-
-7. No source with BF = 0 showed unexpected bids (correct behavior confirmed).
+5. SKYLB — Only source performing at a reasonable level
+   BF: 69% → Actual: 40.4% — still a gap but closest to working correctly.
 
 RECOMMENDED ACTIONS
-• Immediate: Audit the random number generator logic in the Datalot BF JSON control — compare expected distribution to actual distribution per source.
-• Priority fix order: RATEQ → WISDO → ADLNT → SCALA → DIGIP (by volume impact).
-• Verify BF JSON values are being read correctly by the algo — check for parsing errors or state-level overrides nullifying settings.
-• Run a controlled test with BF set to 100% on a single low-volume source to isolate whether the issue is the BF value read or the random comparison logic.`;
+• Audit the random number generator logic in the Datalot BF JSON control
+• Priority fix order: RATEQ → WISDO → ADLNT → SCALA → DIGIP (by volume impact)
+• Run a controlled test with BF set to 100% on a single low-volume source
+• Verify BF JSON values are being read correctly — check for parsing errors`;
 
-  document.getElementById('findings-display').textContent=findings;
-  document.getElementById('findings-display').classList.add('live');
+  document.getElementById('findings-display').textContent=text;
+  document.getElementById('followup-area').style.display='';
+  currentAnalysisContext=text;
+  document.getElementById('analysis-source-label').textContent='Source: Ping Analysis.xlsx';
   toast('Ping findings loaded');
 }
 
-// ── Build source table ──
+// ── Charts ──
+let bfChart=null, missedChart=null;
+function buildCharts(){
+  const sources=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN','QUOTV','COBRA','SKYLB','R2MED','HLGSL','HIWMG','VPMOP','PALOM','REVRS','HLTHC','GOLDM'];
+  const bfSet=[46,51,78,44,43,51,48,40,51,43,48,64,69,55,46,79,87,49,92,90,77];
+  const actual=[6.0,6.8,8.6,17.1,9.1,8.4,7.4,7.4,10.7,18.7,14.6,19.4,40.4,17.0,5.5,25.6,16.1,11.2,48.5,17.3,60.4];
+  if(bfChart)bfChart.destroy();
+  bfChart=new Chart(document.getElementById('chart-bf'),{
+    type:'bar',
+    data:{labels:sources,datasets:[
+      {label:'BF setting %',data:bfSet,backgroundColor:'#B5D4F4',borderRadius:2},
+      {label:'Actual bid rate %',data:actual,backgroundColor:'#E24B4A',borderRadius:2}
+    ]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>v+'%'},max:100},
+        y:{ticks:{font:{size:10,family:'IBM Plex Mono'}},grid:{display:false}}
+      }
+    }
+  });
+  const top10=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN'];
+  const vals=[420969,245510,174760,137597,82607,41077,40692,38861,15284,13983];
+  const colors=vals.map(v=>v>200000?'#E24B4A':v>80000?'#EF9F27':'#85B7EB');
+  if(missedChart)missedChart.destroy();
+  missedChart=new Chart(document.getElementById('chart-missed'),{
+    type:'bar',
+    data:{labels:top10,datasets:[{data:vals,backgroundColor:colors,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' calls missed'}}},
+      scales:{
+        x:{ticks:{font:{size:10,family:'IBM Plex Mono'},maxRotation:40,autoSkip:false},grid:{display:false}},
+        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>(v/1000).toFixed(0)+'K'}}
+      }
+    }
+  });
+}
+
+// ── Source table ──
 function buildSourceTable(){
-  const sources=[
+  const rows=[
     {s:'RATEQ',bf:46,pings:1547596,exp:538376,bids:117407,rate:6.0,gap:40.0,missed:420969,sev:'High'},
     {s:'WISDO',bf:51,pings:656691,exp:320130,bids:74620,rate:6.8,gap:44.6,missed:245510,sev:'High'},
     {s:'ADLNT',bf:78,pings:278489,exp:225339,bids:50579,rate:8.6,gap:69.4,missed:174760,sev:'Critical'},
@@ -672,11 +764,9 @@ function buildSourceTable(){
     {s:'HLTHC',bf:90,pings:60,exp:50,bids:23,rate:17.3,gap:72.7,missed:27,sev:'Critical'},
     {s:'GOLDM',bf:77,pings:1035,exp:736,bids:813,rate:60.4,gap:16.5,missed:-76,sev:'OK'},
   ];
-
   const sevMap={Critical:'pill-red',High:'pill-amber',Moderate:'pill-cyan',OK:'pill-green'};
   const colorMap={Critical:'#E24B4A',High:'#d97706',Moderate:'#29b6d8',OK:'#16a34a'};
-
-  document.getElementById('source-tbody').innerHTML=sources.map(r=>`
+  document.getElementById('source-tbody').innerHTML=rows.map(r=>`
     <tr>
       <td style="font-weight:600;color:var(--text)">${r.s}</td>
       <td class="num">${r.bf}%</td>
@@ -684,59 +774,16 @@ function buildSourceTable(){
       <td class="num">${r.exp.toLocaleString()}</td>
       <td class="num">${r.bids.toLocaleString()}</td>
       <td class="num">${r.rate}%</td>
-      <td>
-        <div class="bar-wrap">
-          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(r.gap,100)}%;background:${colorMap[r.sev]}"></div></div>
-          <span class="bar-pct">${r.gap.toFixed(1)}%</span>
-        </div>
-      </td>
+      <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${Math.min(r.gap,100)}%;background:${colorMap[r.sev]}"></div></div><span class="bar-pct">${r.gap.toFixed(1)}%</span></div></td>
       <td class="num">${r.missed.toLocaleString()}</td>
       <td><span class="pill ${sevMap[r.sev]}">${r.sev}</span></td>
     </tr>`).join('');
 }
 
-// ── Charts ──
-function buildCharts(){
-  const sources=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN','QUOTV','COBRA','SKYLB','R2MED','HLGSL','HIWMG','VPMOP','PALOM','REVRS','HLTHC','GOLDM'];
-  const bfSet=[46,51,78,44,43,51,48,40,51,43,48,64,69,55,46,79,87,49,92,90,77];
-  const actual=[6.0,6.8,8.6,17.1,9.1,8.4,7.4,7.4,10.7,18.7,14.6,19.4,40.4,17.0,5.5,25.6,16.1,11.2,48.5,17.3,60.4];
-
-  new Chart(document.getElementById('chart-bf'),{
-    type:'bar',
-    data:{labels:sources,datasets:[
-      {label:'BF setting %',data:bfSet,backgroundColor:'#B5D4F4',borderRadius:2},
-      {label:'Actual bid rate %',data:actual,backgroundColor:'#E24B4A',borderRadius:2}
-    ]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},
-      scales:{
-        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>v+'%'},max:100},
-        y:{ticks:{font:{size:10,family:'IBM Plex Mono'}},grid:{display:false}}
-      }
-    }
-  });
-
-  const top10Sources=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN'];
-  const top10Missed=[420969,245510,174760,137597,82607,41077,40692,38861,15284,13983];
-  const colors=top10Missed.map(v=>v>200000?'#E24B4A':v>80000?'#EF9F27':'#85B7EB');
-
-  new Chart(document.getElementById('chart-missed'),{
-    type:'bar',
-    data:{labels:top10Sources,datasets:[{data:top10Missed,backgroundColor:colors,borderRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' calls missed'}}},
-      scales:{
-        x:{ticks:{font:{size:10,family:'IBM Plex Mono'},maxRotation:40,autoSkip:false},grid:{display:false}},
-        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>(v/1000).toFixed(0)+'K'}}
-      }
-    }
-  });
-}
-
 // ── Toast ──
 function toast(msg){
   const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2300);
+  setTimeout(()=>el.classList.remove('show'),2500);
 }
 
 // ── Init ──
