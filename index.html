@@ -6,201 +6,155 @@
 <title>Griff's Dash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-/* ── Datalot brand tokens (white-mode override) ── */
-:root {
-  --dl-nav:          #ffffff;
-  --dl-bg:           #f4f5f7;
-  --dl-card:         #ffffff;
-  --dl-card-raised:  #f8f9fa;
-  --dl-well:         #eef0f2;
-  --dl-border:       rgba(0,0,0,0.08);
-  --dl-border-md:    rgba(0,0,0,0.15);
-  --dl-text:         #111111;
-  --dl-text-2:       #3d3d3d;
-  --dl-text-3:       #888888;
-  --dl-cyan:         #29b6d8;
-  --dl-cyan-dim:     rgba(41,182,216,0.10);
-  --dl-cyan-border:  rgba(41,182,216,0.35);
-  --dl-green:        #16a34a;
-  --dl-green-dim:    rgba(22,163,74,0.10);
-  --dl-green-border: rgba(22,163,74,0.30);
-  --dl-red:          #dc2626;
-  --dl-red-dim:      rgba(220,38,38,0.10);
-  --dl-red-border:   rgba(220,38,38,0.28);
-  --dl-amber:        #d97706;
-  --dl-amber-dim:    rgba(217,119,6,0.10);
-  --dl-amber-border: rgba(217,119,6,0.30);
-  --dl-purple:       #7c3aed;
-  --dl-purple-dim:   rgba(124,58,237,0.10);
-  --dl-purple-border:rgba(124,58,237,0.28);
-  --dl-font:      'Inter', sans-serif;
-  --dl-font-disp: 'Barlow Condensed', sans-serif;
-  --dl-font-mono: 'IBM Plex Mono', monospace;
-  --dl-radius:    8px;
-  --dl-radius-lg: 10px;
-  --dl-radius-sm: 4px;
-}
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased}
-body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);font-size:14px;line-height:1.6;min-height:100vh}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--dl-well);border-radius:4px}
+body{background:#f4f5f7;color:#111;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
 
-/* ── Shell ── */
+:root{
+  --cyan:#29b6d8;--cyan-dim:rgba(41,182,216,.10);--cyan-border:rgba(41,182,216,.35);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.10);--green-border:rgba(22,163,74,.30);
+  --red:#dc2626;--red-dim:rgba(220,38,38,.10);--red-border:rgba(220,38,38,.28);
+  --amber:#d97706;--amber-dim:rgba(217,119,6,.10);--amber-border:rgba(217,119,6,.30);
+  --purple:#7c3aed;--purple-dim:rgba(124,58,237,.10);--purple-border:rgba(124,58,237,.28);
+  --nav:#fff;--bg:#f4f5f7;--card:#fff;--surface:#f8f9fa;--well:#eef0f2;
+  --border:rgba(0,0,0,.08);--border-md:rgba(0,0,0,.15);
+  --text:#111;--text2:#3d3d3d;--text3:#888;
+  --r:8px;--rlg:10px;--rsm:4px;
+}
+
 .shell{display:flex;min-height:100vh}
-.sidebar{width:220px;flex-shrink:0;background:var(--dl-nav);border-right:1px solid var(--dl-border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:1px 0 4px rgba(0,0,0,0.05)}
+.sidebar{width:220px;flex-shrink:0;background:var(--nav);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:1px 0 4px rgba(0,0,0,.05)}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 
-/* ── Sidebar ── */
-.sb-logo{padding:0 20px 20px;border-bottom:2px solid var(--dl-cyan);margin-bottom:16px}
-.sb-logo-mark{display:flex;align-items:center;gap:9px}
-.sb-icon{width:32px;height:32px;background:var(--dl-cyan);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#111;font-family:var(--dl-font-disp);font-size:13px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
-.sb-app{font-family:var(--dl-font-disp);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dl-text);line-height:1}
-.sb-sub{font-family:var(--dl-font-mono);font-size:9px;color:var(--dl-cyan);margin-top:3px;letter-spacing:.06em;text-transform:uppercase}
+.sb-logo{padding:0 20px 20px;border-bottom:2px solid var(--cyan);margin-bottom:16px}
+.sb-icon{width:32px;height:32px;background:var(--cyan);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#111;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
+.sb-app{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);line-height:1}
+.sb-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--cyan);margin-top:3px;letter-spacing:.06em;text-transform:uppercase}
 
 .sb-section{padding:0 12px;margin-bottom:6px}
-.sb-label{font-family:var(--dl-font-mono);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dl-text-3);padding:0 8px;margin-bottom:4px;margin-top:12px}
+.sb-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:4px;margin-top:12px}
 
-.nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--dl-radius-sm);font-size:13px;color:var(--dl-text-2);cursor:pointer;transition:all .15s;border:1px solid transparent;background:none;width:100%;text-align:left;font-family:var(--dl-font)}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--rsm);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;border:1px solid transparent;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .nav-item i{font-size:16px;flex-shrink:0}
-.nav-item:hover{background:var(--dl-card-raised);color:var(--dl-text)}
-.nav-item.active{background:var(--dl-cyan-dim);color:var(--dl-cyan);border-color:var(--dl-cyan-border)}
+.nav-item:hover{background:var(--surface);color:var(--text)}
+.nav-item.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
 
-.sb-footer{margin-top:auto;padding:14px 20px;border-top:1px solid var(--dl-border);font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3)}
-.sb-user{display:flex;align-items:center;gap:9px}
-.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--dl-cyan-dim);border:1px solid var(--dl-cyan-border);color:var(--dl-cyan);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--dl-font-disp);flex-shrink:0}
-.sb-uname{font-weight:700;color:var(--dl-text-2);font-size:11px}
-.sb-urole{color:var(--dl-text-3);font-size:9px}
+.sb-footer{margin-top:auto;padding:14px 20px;border-top:1px solid var(--border)}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'Barlow Condensed',sans-serif;flex-shrink:0}
+.sb-uname{font-weight:600;color:var(--text2);font-size:11px}
+.sb-urole{color:var(--text3);font-size:9px;font-family:'IBM Plex Mono',monospace}
 
-/* ── Topbar ── */
-.topbar{background:var(--dl-nav);border-bottom:2px solid var(--dl-cyan);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;box-shadow:0 1px 6px rgba(0,0,0,0.06)}
-.tb-title{font-family:var(--dl-font-disp);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dl-text)}
-.tb-right{display:flex;align-items:center;gap:10px}
-.tb-date{font-family:var(--dl-font-mono);font-size:11px;color:var(--dl-text-3)}
+.topbar{background:var(--nav);border-bottom:2px solid var(--cyan);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)}
+.tb-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)}
 
-/* ── Content ── */
 .content{flex:1;overflow-y:auto;padding:24px 28px}
 .section{display:none}.section.active{display:block}
 
-/* ── Buttons ── */
-.btn{font-family:var(--dl-font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:6px 14px;border-radius:var(--dl-radius-sm);border:1px solid var(--dl-border-md);background:transparent;color:var(--dl-text-2);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
-.btn:hover{background:var(--dl-card-raised);color:var(--dl-text)}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:7px 14px;border-radius:var(--rsm);border:1px solid var(--border-md);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--surface);color:var(--text)}
 .btn i{font-size:13px}
-.btn-primary{background:var(--dl-cyan);color:#111;border-color:var(--dl-cyan);font-weight:700}
-.btn-primary:hover{background:#22a0c2;border-color:#22a0c2;color:#111}
-.btn-notion{background:var(--dl-purple-dim);color:var(--dl-purple);border-color:var(--dl-purple-border)}
-.btn-notion:hover{background:var(--dl-purple);color:#fff}
+.btn-primary{background:var(--cyan);color:#111;border-color:var(--cyan);font-weight:700}
+.btn-primary:hover{background:#22a0c2;border-color:#22a0c2}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-danger{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
 
-/* ── KPI row ── */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.kpi-card{background:var(--dl-card);border:1px solid var(--dl-border);border-top:3px solid var(--dl-cyan);border-radius:var(--dl-radius-lg);padding:14px}
-.kpi-card.positive{border-top-color:var(--dl-green)}
-.kpi-card.negative{border-top-color:var(--dl-red)}
-.kpi-card.warn{border-top-color:var(--dl-amber)}
-.kpi-label{font-family:var(--dl-font-mono);font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dl-text-3);margin-bottom:6px}
-.kpi-value{font-family:var(--dl-font-disp);font-size:26px;font-weight:700;line-height:1;color:var(--dl-text);margin-bottom:4px}
-.kpi-delta{font-size:11px;color:var(--dl-text-3);font-family:var(--dl-font-mono)}
-.kpi-delta.up{color:var(--dl-green)}.kpi-delta.dn{color:var(--dl-red)}
+.kpi{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--cyan);border-radius:var(--rlg);padding:14px}
+.kpi.pos{border-top-color:var(--green)}.kpi.neg{border-top-color:var(--red)}.kpi.warn{border-top-color:var(--amber)}
+.kpi-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.kpi-value{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;line-height:1;color:var(--text);margin-bottom:4px}
+.kpi-delta{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}
 
-/* ── Card ── */
-.card{background:var(--dl-card);border:1px solid var(--dl-border);border-radius:var(--dl-radius-lg);overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.card-header{padding:10px 18px;border-bottom:1px solid var(--dl-border);background:var(--dl-card-raised);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.card-title{font-family:var(--dl-font-disp);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dl-text);display:flex;align-items:center;gap:7px}
-.card-title i{font-size:15px;color:var(--dl-cyan)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card-header{padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);display:flex;align-items:center;gap:7px}
+.card-title i{font-size:15px;color:var(--cyan)}
 .card-body{padding:18px}
 
-/* ── Prompt area ── */
-.prompt-wrap{border:1px solid var(--dl-border-md);border-radius:var(--dl-radius);overflow:hidden;margin-bottom:10px;transition:border-color .15s}
-.prompt-wrap:focus-within{border-color:var(--dl-cyan)}
-.prompt-wrap textarea{width:100%;display:block;background:transparent;border:none;outline:none;font-size:13px;font-family:var(--dl-font);color:var(--dl-text);resize:none;padding:11px 14px;min-height:68px;line-height:1.6}
-.prompt-wrap textarea::placeholder{color:var(--dl-text-3)}
-.prompt-footer{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--dl-card-raised);border-top:1px solid var(--dl-border)}
-.char-count{font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3)}
+.prompt-wrap{border:1px solid var(--border-md);border-radius:var(--r);overflow:hidden;margin-bottom:10px;transition:border-color .15s}
+.prompt-wrap:focus-within{border-color:var(--cyan)}
+.prompt-wrap textarea{width:100%;display:block;background:transparent;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);resize:none;padding:11px 14px;min-height:68px;line-height:1.6}
+.prompt-wrap textarea::placeholder{color:var(--text3)}
+.prompt-footer{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--surface);border-top:1px solid var(--border)}
 
-/* ── Quick chips ── */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.chip{font-family:var(--dl-font-mono);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dl-text-3);border:1px solid var(--dl-border-md);background:var(--dl-card-raised);padding:4px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;transition:all .12s}
-.chip:hover{background:var(--dl-cyan-dim);color:var(--dl-cyan);border-color:var(--dl-cyan-border)}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);border:1px solid var(--border-md);background:var(--surface);padding:4px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;transition:all .12s}
+.chip:hover{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
 
-/* ── Findings ── */
-.findings-box{background:var(--dl-card-raised);border:1px solid var(--dl-border);border-radius:var(--dl-radius);padding:14px 16px;font-size:13px;color:var(--dl-text-3);min-height:90px;line-height:1.7;white-space:pre-wrap}
-.findings-box.has-content{color:var(--dl-text-2)}
+.findings-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--text3);min-height:90px;line-height:1.8;white-space:pre-wrap;font-family:'Inter',sans-serif}
+.findings-box.live{color:var(--text2)}
 
-/* ── Notes ── */
-.notes-area{width:100%;background:transparent;border:none;outline:none;font-size:13px;font-family:var(--dl-font);color:var(--dl-text);resize:vertical;min-height:90px;line-height:1.7}
-.notes-area::placeholder{color:var(--dl-text-3)}
-.notes-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--dl-border);margin-top:10px}
-.notes-status{font-family:var(--dl-font-mono);font-size:9px;color:var(--dl-text-3);letter-spacing:.04em;text-transform:uppercase}
+.notes-area{width:100%;background:transparent;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);resize:vertical;min-height:90px;line-height:1.7}
+.notes-area::placeholder{color:var(--text3)}
 
-/* ── Table ── */
 .dl-table{width:100%;border-collapse:collapse}
-.dl-table th{text-align:left;font-family:var(--dl-font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#111;background:#29b6d8;padding:8px 14px;border-bottom:1px solid var(--dl-border);white-space:nowrap}
-.dl-table td{padding:9px 14px;border-bottom:1px solid var(--dl-border);vertical-align:middle;font-size:12.5px;color:var(--dl-text-2)}
+.dl-table th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#111;background:#29b6d8;padding:8px 12px;white-space:nowrap}
+.dl-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:12.5px;color:var(--text2)}
 .dl-table tr:last-child td{border-bottom:none}
-.dl-table tr:hover td{background:var(--dl-card-raised)}
-.num{font-family:var(--dl-font-mono);font-size:12px}
+.dl-table tr:hover td{background:var(--surface)}
+.num{font-family:'IBM Plex Mono',monospace;font-size:12px}
 
-/* Bar */
 .bar-wrap{display:flex;align-items:center;gap:8px}
-.bar-track{width:64px;height:4px;background:var(--dl-well);border-radius:2px;overflow:hidden}
+.bar-track{width:64px;height:4px;background:var(--well);border-radius:2px;overflow:hidden}
 .bar-fill{height:4px;border-radius:2px;transition:width .5s ease}
-.bar-pct{font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3)}
+.bar-pct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
 
-/* Pills */
-.pill{display:inline-block;font-family:var(--dl-font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;border:1px solid;white-space:nowrap}
-.pill-green{background:var(--dl-green-dim);color:var(--dl-green);border-color:var(--dl-green-border)}
-.pill-amber{background:var(--dl-amber-dim);color:var(--dl-amber);border-color:var(--dl-amber-border)}
-.pill-red{background:var(--dl-red-dim);color:var(--dl-red);border-color:var(--dl-red-border)}
+.pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;border:1px solid;white-space:nowrap}
+.pill-green{background:var(--green-dim);color:#0f6e36;border-color:var(--green-border)}
+.pill-amber{background:var(--amber-dim);color:#854f0b;border-color:var(--amber-border)}
+.pill-red{background:var(--red-dim);color:#991b1b;border-color:var(--red-border)}
+.pill-cyan{background:var(--cyan-dim);color:#0e7490;border-color:var(--cyan-border)}
 
-/* ── Upload zone ── */
-.upload-zone{border:2px dashed var(--dl-border-md);border-radius:var(--dl-radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;position:relative}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--dl-cyan);background:var(--dl-cyan-dim)}
+.upload-zone{border:2px dashed var(--border-md);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--cyan);background:var(--cyan-dim)}
 .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:32px;color:var(--dl-text-3);margin-bottom:8px}
-.upload-title{font-family:var(--dl-font-disp);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--dl-text-2);margin-bottom:4px}
-.upload-sub{font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3);letter-spacing:.03em}
-.upload-badge{display:none;background:var(--dl-green-dim);border:1px solid var(--dl-green-border);border-radius:var(--dl-radius-sm);padding:8px 14px;margin-top:10px;font-family:var(--dl-font-mono);font-size:11px;color:var(--dl-green);text-align:left}
-.upload-badge.show{display:flex;align-items:center;gap:8px}
+.upload-zone-icon{font-size:32px;color:var(--text3);margin-bottom:8px}
+.upload-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:4px}
+.upload-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)}
 
-/* ── Notion integration panel ── */
-.notion-panel{background:var(--dl-purple-dim);border:1px solid var(--dl-purple-border);border-radius:var(--dl-radius);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.notion-info{display:flex;align-items:center;gap:10px}
-.notion-icon{font-size:20px;color:var(--dl-purple)}
-.notion-label{font-family:var(--dl-font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--dl-purple);margin-bottom:2px}
-.notion-sub{font-size:12px;color:var(--dl-text-2)}
-.notion-connected{display:none;align-items:center;gap:6px;font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-green)}
-.notion-connected.show{display:flex}
+.file-badge{display:none;background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--rsm);padding:8px 14px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green);align-items:center;gap:8px}
+.file-badge.show{display:flex}
 
-/* ── Standup placeholder ── */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.15);border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.alert-card{background:var(--red-dim);border:1px solid var(--red-border);border-radius:var(--r);padding:12px 16px;margin-bottom:12px}
+.alert-title{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.alert-title i{font-size:14px}
+
 .standup-empty{text-align:center;padding:3.5rem 2rem}
-.standup-empty i{font-size:44px;color:var(--dl-text-3);display:block;margin-bottom:14px;opacity:.3}
-.standup-empty h3{font-family:var(--dl-font-disp);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--dl-text-2);margin-bottom:8px}
-.standup-empty p{font-size:13px;color:var(--dl-text-3);max-width:340px;margin:0 auto 20px;line-height:1.7}
+.standup-empty i{font-size:44px;color:var(--text3);display:block;margin-bottom:14px;opacity:.3}
+.standup-empty h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:8px}
+.standup-empty p{font-size:13px;color:var(--text3);max-width:340px;margin:0 auto 20px;line-height:1.7}
 
-/* ── History ── */
-.history-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--dl-border)}
+.history-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
 .history-item:last-child{border-bottom:none}
-.h-icon{width:32px;height:32px;border-radius:var(--dl-radius-sm);background:var(--dl-cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.h-icon i{font-size:16px;color:var(--dl-cyan)}
-.h-title{font-size:12.5px;font-weight:600;color:var(--dl-text)}
-.h-meta{font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3);margin-top:2px}
-.h-date{font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3);margin-left:auto;flex-shrink:0;padding-top:2px}
+.h-icon{width:32px;height:32px;border-radius:var(--rsm);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.h-icon i{font-size:16px;color:var(--cyan)}
+.h-title{font-size:12.5px;font-weight:600;color:var(--text)}
+.h-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-top:2px}
+.h-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;flex-shrink:0;padding-top:2px}
 
-/* ── Toast ── */
-#toast{position:fixed;bottom:20px;right:20px;background:var(--dl-text);color:#fff;font-family:var(--dl-font-mono);font-size:12px;padding:10px 16px;border-radius:var(--dl-radius-sm);opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;z-index:999;letter-spacing:.02em}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);padding:14px 16px}
+.chart-card-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:12px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:11px;color:var(--text3)}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+#toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 16px;border-radius:var(--rsm);opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;z-index:999;letter-spacing:.02em}
 #toast.show{opacity:1;transform:translateY(0)}
-
-/* ── Section label ── */
-.sl{font-family:var(--dl-font-mono);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dl-text-3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.sl::after{content:'';flex:1;height:1px;background:var(--dl-border)}
-
-/* ── Divider ── */
-.divider{height:1px;background:var(--dl-border);margin:12px 0}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .section.active>*{animation:fadeUp .18s ease both}
@@ -208,40 +162,34 @@ body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);fon
 .section.active>*:nth-child(3){animation-delay:.08s}
 .section.active>*:nth-child(4){animation-delay:.12s}
 .section.active>*:nth-child(5){animation-delay:.16s}
-
-@media(max-width:768px){.sidebar{display:none}.content{padding:16px}}
+@media(max-width:768px){.sidebar{display:none}.content{padding:16px}.chart-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="shell">
 
-<!-- ── Sidebar ── -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-logo-mark">
+    <div style="display:flex;align-items:center;gap:9px">
       <div class="sb-icon">QM</div>
       <div>
         <div class="sb-app">Griff's Dash</div>
-        <div class="sb-sub">Griff's Workspace</div>
+        <div class="sb-sub">QM Media · Centerfield</div>
       </div>
     </div>
   </div>
-
   <div class="sb-section">
     <div class="sb-label">Main</div>
     <button class="nav-item active" onclick="switchTab('analysis',this)"><i class="ti ti-chart-bar"></i> Analysis</button>
     <button class="nav-item" onclick="switchTab('upload',this)"><i class="ti ti-table-import"></i> Data Upload</button>
     <button class="nav-item" onclick="switchTab('standup',this)"><i class="ti ti-presentation-analytics"></i> QM Standups</button>
     <button class="nav-item" onclick="switchTab('history',this)"><i class="ti ti-history"></i> History</button>
-
     <div class="sb-label" style="margin-top:14px">Quick Actions</div>
-    <button class="nav-item" onclick="loadSampleData()"><i class="ti ti-database-import"></i> Load Sample Data</button>
+    <button class="nav-item" onclick="loadPingFindings()"><i class="ti ti-database-import"></i> Load Ping Findings</button>
     <button class="nav-item" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
-    <button class="nav-item" onclick="switchTab('upload',this)"><i class="ti ti-upload"></i> Upload Excel</button>
   </div>
-
   <div class="sb-footer">
-    <div class="sb-user">
+    <div style="display:flex;align-items:center;gap:9px">
       <div class="sb-avatar">GH</div>
       <div>
         <div class="sb-uname">Griff</div>
@@ -251,82 +199,88 @@ body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);fon
   </div>
 </aside>
 
-<!-- ── Main ── -->
 <div class="main">
-
-  <!-- Topbar -->
   <header class="topbar">
     <div class="tb-title" id="page-title">Analysis</div>
-    <div class="tb-right">
+    <div style="display:flex;align-items:center;gap:10px">
       <span class="tb-date" id="live-date"></span>
-      <button class="btn" onclick="saveToNotion()"><i class="ti ti-brand-notion"></i> Save to Notion</button>
       <button class="btn" onclick="window.print()"><i class="ti ti-printer"></i> Export</button>
     </div>
   </header>
 
-  <!-- Content -->
   <div class="content">
 
-    <!-- ══════════ ANALYSIS TAB ══════════ -->
+    <!-- ══ ANALYSIS TAB ══ -->
     <div class="section active" id="tab-analysis">
 
       <div class="kpi-row">
-        <div class="kpi-card" id="kpi-spend-card">
-          <div class="kpi-label">Total Spend</div>
-          <div class="kpi-value" id="m-spend">—</div>
-          <div class="kpi-delta" id="d-spend">load data below</div>
+        <div class="kpi neg">
+          <div class="kpi-label">Total Pings</div>
+          <div class="kpi-value" id="m-pings">3.81M</div>
+          <div class="kpi-delta">Across all sources</div>
         </div>
-        <div class="kpi-card" id="kpi-leads-card">
-          <div class="kpi-label">Total Leads</div>
-          <div class="kpi-value" id="m-leads">—</div>
-          <div class="kpi-delta" id="d-leads">—</div>
+        <div class="kpi warn">
+          <div class="kpi-label">Expected Bids</div>
+          <div class="kpi-value" id="m-exp">1.69M</div>
+          <div class="kpi-delta">Based on BF settings</div>
         </div>
-        <div class="kpi-card" id="kpi-cpl-card">
-          <div class="kpi-label">Avg CPL</div>
-          <div class="kpi-value" id="m-cpl">—</div>
-          <div class="kpi-delta" id="d-cpl">—</div>
+        <div class="kpi neg">
+          <div class="kpi-label">Actual Bids</div>
+          <div class="kpi-value" id="m-bids">455K</div>
+          <div class="kpi-delta dn">Only 26.9% of expected</div>
         </div>
-        <div class="kpi-card" id="kpi-cvr-card">
-          <div class="kpi-label">Conv. Rate</div>
-          <div class="kpi-value" id="m-cvr">—</div>
-          <div class="kpi-delta" id="d-cvr">—</div>
+        <div class="kpi neg">
+          <div class="kpi-label">Calls Missed</div>
+          <div class="kpi-value" id="m-missed">1.24M</div>
+          <div class="kpi-delta dn">73.1% of expected lost</div>
         </div>
       </div>
 
-      <!-- Notion bar -->
-      <div class="notion-panel" style="margin-bottom:16px">
-        <div class="notion-info">
-          <i class="ti ti-brand-notion notion-icon"></i>
-          <div>
-            <div class="notion-label">Notion Integration</div>
-            <div class="notion-sub" id="notion-status-text">Connect to log analyses &amp; standups to a Notion database</div>
+      <!-- Alert -->
+      <div class="alert-card">
+        <div class="alert-title"><i class="ti ti-alert-triangle"></i> Active Issue — BF algorithm not enforcing bid frequency settings</div>
+        <div style="font-size:12.5px;color:#7f1d1d;line-height:1.7">Every source with BF &gt; 0 is bidding far below its setting. This is a platform-level enforcement failure, not a per-source issue. The random number feature is not aligning with BF. Across 3.8M pings, 1.24M calls that should have been bid were not.</div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card-title">BF setting vs actual bid rate by source</div>
+          <div style="position:relative;height:300px">
+            <canvas id="chart-bf" role="img" aria-label="Horizontal bar chart comparing BF setting vs actual bid rate. All sources show actual far below BF.">All sources bid far below BF settings.</canvas>
+          </div>
+          <div class="legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#B5D4F4"></span>BF setting</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#E24B4A"></span>Actual bid rate</span>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="notion-connected" id="notion-connected"><i class="ti ti-circle-check"></i> Connected</div>
-          <button class="btn btn-notion" id="notion-connect-btn" onclick="connectNotion()"><i class="ti ti-plug"></i> Connect Notion</button>
+        <div class="chart-card">
+          <div class="chart-card-title">Calls missed by source (top 10)</div>
+          <div style="position:relative;height:300px">
+            <canvas id="chart-missed" role="img" aria-label="Bar chart of calls missed. RATEQ 421K, WISDO 246K, ADLNT 175K.">RATEQ leads with 421K missed calls.</canvas>
+          </div>
         </div>
       </div>
 
-      <!-- AI prompt -->
+      <!-- AI Prompt -->
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-brain"></i> Run Analysis with Claude</span>
+          <span id="api-status" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green)">● Live</span>
         </div>
         <div class="card-body">
           <div class="chips">
-            <button class="chip" onclick="setPrompt('Analyze this week\'s channel performance and flag any CPL outliers: ')">Channel perf</button>
-            <button class="chip" onclick="setPrompt('Compare spend vs leads this week vs last week: ')">WoW compare</button>
-            <button class="chip" onclick="setPrompt('Which channels have the best ROI and which should we cut or scale? ')">Budget alloc</button>
-            <button class="chip" onclick="setPrompt('Summarize QM media performance for the week and surface key takeaways: ')">Weekly summary</button>
-            <button class="chip" onclick="setPrompt('Identify trends and anomalies in the following data: ')">Trend analysis</button>
-            <button class="chip" onclick="setPrompt('What is our pacing vs budget goals and are there any risks? ')">Pacing check</button>
+            <button class="chip" onclick="setPrompt('Drill down into the RATEQ source BF issue by state. Which states have the worst gaps? ')">RATEQ by state</button>
+            <button class="chip" onclick="setPrompt('Which sources should we prioritize fixing first based on call volume and BF gap severity? ')">Fix priority</button>
+            <button class="chip" onclick="setPrompt('Summarize the QM ping analysis BF compliance issue for a team standup. Keep it to 5 bullet points. ')">Standup summary</button>
+            <button class="chip" onclick="setPrompt('What are the recommended actions to fix the BF algorithm issue? ')">Recommended actions</button>
+            <button class="chip" onclick="setPrompt('Analyze the difference between sources where the algo is closest to working vs worst performers. ')">Best vs worst</button>
           </div>
           <div class="prompt-wrap">
-            <textarea id="analysis-input" placeholder="Describe what to analyze — paste data, ask a question, or pick a chip above…" oninput="updateCharCount()"></textarea>
+            <textarea id="analysis-input" placeholder="Ask a question about the QM media data or BF analysis…" oninput="updateCharCount()"></textarea>
             <div class="prompt-footer">
-              <span class="char-count" id="char-count">0 chars</span>
-              <button class="btn btn-primary" onclick="runAnalysis()"><i class="ti ti-player-play"></i> Run Analysis</button>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)" id="char-count">0 chars</span>
+              <button class="btn btn-primary" id="run-btn" onclick="runAnalysis()"><i class="ti ti-player-play"></i> Run Analysis</button>
             </div>
           </div>
         </div>
@@ -337,16 +291,16 @@ body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);fon
         <div class="card-header">
           <span class="card-title"><i class="ti ti-report-analytics"></i> Findings &amp; Takeaways</span>
           <div style="display:flex;gap:6px">
-            <button class="btn" onclick="saveToNotion()"><i class="ti ti-brand-notion"></i> Log to Notion</button>
+            <button class="btn" onclick="pushToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
             <button class="btn" onclick="clearFindings()"><i class="ti ti-trash"></i> Clear</button>
           </div>
         </div>
         <div class="card-body">
-          <div class="findings-box" id="findings-display">Analysis results will appear here after you run a query above.</div>
+          <div class="findings-box live" id="findings-display">Loading ping analysis findings...</div>
         </div>
       </div>
 
-      <!-- Griff notes -->
+      <!-- Notes -->
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-pencil"></i> Griff's Notes &amp; Commentary</span>
@@ -356,136 +310,116 @@ body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);fon
           </div>
         </div>
         <div class="card-body">
-          <textarea class="notes-area" id="griff-notes" placeholder="Add context, flags, or recommendations. These carry into standup reports and can be logged to Notion."></textarea>
-          <div class="notes-footer">
-            <span class="notes-status" id="notes-status">Unsaved</span>
+          <textarea class="notes-area" id="griff-notes" placeholder="Add context, flags, or recommendations here. These carry into standup reports."></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:10px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em" id="notes-status">Unsaved</span>
           </div>
         </div>
       </div>
 
-      <!-- Channel table -->
+      <!-- Source table -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title"><i class="ti ti-table"></i> Channel Breakdown</span>
-          <button class="btn" onclick="loadSampleData()"><i class="ti ti-database-import"></i> Load Sample</button>
+          <span class="card-title"><i class="ti ti-table"></i> Source Breakdown — BF Compliance</span>
         </div>
         <div style="overflow-x:auto">
-          <table class="dl-table">
-            <thead>
-              <tr>
-                <th>Channel</th><th>Spend</th><th>Leads</th><th>CPL</th><th>Pacing</th><th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="channel-tbody">
-              <tr><td colspan="6" style="color:var(--dl-text-3);padding:1.5rem 14px;font-size:12px">Load sample data or run an analysis to populate.</td></tr>
-            </tbody>
+          <table class="dl-table" id="source-table">
+            <thead><tr>
+              <th>Source</th><th>BF Setting</th><th>Pings</th><th>Exp. Bids</th><th>Actual Bids</th><th>Actual Rate</th><th>Gap</th><th>Calls Missed</th><th>Severity</th>
+            </tr></thead>
+            <tbody id="source-tbody"></tbody>
           </table>
         </div>
       </div>
 
-    </div><!-- /tab-analysis -->
+    </div><!-- /analysis -->
 
-    <!-- ══════════ DATA UPLOAD TAB ══════════ -->
+    <!-- ══ DATA UPLOAD TAB ══ -->
     <div class="section" id="tab-upload">
-
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-table-import"></i> Upload Media Data</span>
         </div>
         <div class="card-body">
-          <div class="sl">Supported formats</div>
-          <p style="font-size:12.5px;color:var(--dl-text-2);margin-bottom:16px;line-height:1.7">Upload an Excel (.xlsx) or CSV file with your media data. Then give Griff instructions and Claude will return analysis in text and graphically where helpful.</p>
-
+          <p style="font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.7">Upload an Excel (.xlsx) or CSV file. Give Claude instructions and get analysis back in text — including charts and data callouts where the data warrants it.</p>
           <div class="upload-zone" id="upload-zone" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
             <input type="file" accept=".xlsx,.xls,.csv" id="file-input" onchange="handleFile(event)">
-            <div class="upload-icon"><i class="ti ti-file-spreadsheet"></i></div>
+            <div class="upload-zone-icon"><i class="ti ti-file-spreadsheet"></i></div>
             <div class="upload-title">Drop your Excel or CSV here</div>
             <div class="upload-sub">or click to browse — .xlsx / .xls / .csv accepted</div>
           </div>
-
-          <div class="upload-badge" id="upload-badge">
-            <i class="ti ti-circle-check" style="font-size:16px"></i>
-            <span id="upload-filename">file.xlsx loaded</span>
-          </div>
+          <div class="file-badge" id="upload-badge"><i class="ti ti-circle-check" style="font-size:16px"></i><span id="upload-filename">file loaded</span></div>
         </div>
       </div>
 
-      <div class="card" id="analysis-instructions-card">
+      <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-message-dots"></i> Analysis Instructions</span>
         </div>
         <div class="card-body">
-          <div class="chips" style="margin-bottom:14px">
+          <div class="chips">
             <button class="chip" onclick="setUploadPrompt('Analyze channel performance, flag CPL outliers, and show which channels are pacing behind. ')">Channel audit</button>
-            <button class="chip" onclick="setUploadPrompt('Compare spend vs leads across all channels and identify the top and bottom performers. ')">Spend vs leads</button>
+            <button class="chip" onclick="setUploadPrompt('Identify sources where BF setting does not match actual bid rate and quantify the gap. ')">BF compliance</button>
             <button class="chip" onclick="setUploadPrompt('Identify trends, anomalies, and week-over-week changes in the data. ')">Trends &amp; anomalies</button>
-            <button class="chip" onclick="setUploadPrompt('Build a budget reallocation recommendation based on CPL and lead volume. ')">Budget reco</button>
+            <button class="chip" onclick="setUploadPrompt('Which sources should be prioritized for fixing based on volume and gap severity? ')">Fix priority</button>
           </div>
           <div class="prompt-wrap">
-            <textarea id="upload-instructions" placeholder="Describe what you want Claude to do with this data — e.g. 'Flag any channels where CPL exceeds $60, compare WoW spend, and show top 3 channels by lead volume'" style="min-height:80px"></textarea>
+            <textarea id="upload-instructions" placeholder="Describe what you want Claude to do with this data…" style="min-height:80px"></textarea>
             <div class="prompt-footer">
-              <span style="font-family:var(--dl-font-mono);font-size:10px;color:var(--dl-text-3)" id="file-status">No file loaded yet</span>
-              <button class="btn btn-primary" onclick="runUploadAnalysis()"><i class="ti ti-player-play"></i> Analyze File</button>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3)" id="file-status">No file loaded yet</span>
+              <button class="btn btn-primary" id="upload-run-btn" onclick="runUploadAnalysis()"><i class="ti ti-player-play"></i> Analyze File</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card" id="upload-findings-card" style="display:none">
+      <div class="card" id="upload-results-card" style="display:none">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-report-analytics"></i> Analysis Results</span>
-          <div style="display:flex;gap:6px">
-            <button class="btn" onclick="saveToNotion()"><i class="ti ti-brand-notion"></i> Log to Notion</button>
-            <button class="btn" onclick="pushUploadToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
-          </div>
+          <button class="btn" onclick="pushUploadToStandup()"><i class="ti ti-arrow-right"></i> Push to Standup</button>
         </div>
         <div class="card-body">
-          <div class="findings-box has-content" id="upload-findings-display"></div>
+          <div class="findings-box live" id="upload-findings"></div>
         </div>
       </div>
+    </div><!-- /upload -->
 
-    </div><!-- /tab-upload -->
-
-    <!-- ══════════ STANDUPS TAB ══════════ -->
+    <!-- ══ STANDUPS TAB ══ -->
     <div class="section" id="tab-standup">
-
-      <div class="card" id="standup-pushed-card" style="display:none">
+      <div class="card" id="standup-content-card" style="display:none">
         <div class="card-header">
-          <span class="card-title"><i class="ti ti-notes"></i> Notes from Analysis</span>
-          <button class="btn" onclick="saveToNotion('standup')"><i class="ti ti-brand-notion"></i> Log to Notion</button>
+          <span class="card-title"><i class="ti ti-notes"></i> This Week's Notes</span>
+          <button class="btn" onclick="window.print()"><i class="ti ti-printer"></i> Print / Share</button>
         </div>
         <div class="card-body">
-          <div class="findings-box has-content" id="standup-notes-display"></div>
+          <div class="findings-box live" id="standup-content"></div>
         </div>
       </div>
-
       <div class="card">
         <div class="standup-empty">
           <i class="ti ti-presentation-analytics"></i>
           <h3>QM Weekly Standup</h3>
-          <p>This section is reserved for Griff. Describe the layout, metrics, and talking points you want for the weekly QM team call and we'll build it out.</p>
-          <button class="btn btn-primary" onclick="openStandupBuilder()"><i class="ti ti-plus"></i> Build Standup View</button>
+          <p>This section is reserved for Griff to configure. Tell us the layout, metrics, and talking points you want for the weekly QM team call and we'll build it out.</p>
+          <button class="btn btn-primary" onclick="alert('Tell us what you want in the standup view — metrics, format, talking points — and we will build it.')"><i class="ti ti-plus"></i> Build Standup View</button>
         </div>
       </div>
+    </div><!-- /standup -->
 
-    </div><!-- /tab-standup -->
-
-    <!-- ══════════ HISTORY TAB ══════════ -->
+    <!-- ══ HISTORY TAB ══ -->
     <div class="section" id="tab-history">
       <div class="card">
         <div class="card-header">
           <span class="card-title"><i class="ti ti-history"></i> Saved Analyses</span>
-          <div class="notion-connected" id="notion-history-badge"><i class="ti ti-brand-notion"></i> Syncing to Notion</div>
         </div>
         <div class="card-body" id="history-list">
-          <p style="font-size:12.5px;color:var(--dl-text-3);padding:.5rem 0">No saved analyses yet. Run an analysis and save your notes to build history here.</p>
+          <p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No saved analyses yet. Run an analysis and save your notes to build history here.</p>
         </div>
       </div>
-    </div><!-- /tab-history -->
+    </div><!-- /history -->
 
-  </div><!-- /content -->
-</div><!-- /main -->
-</div><!-- /shell -->
+  </div>
+</div>
+</div>
 
 <div id="toast"></div>
 
@@ -493,216 +427,324 @@ body{background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-font);fon
 // ── Date ──
 document.getElementById('live-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 
-// ── Tab switching ──
-const TABS = ['analysis','upload','standup','history'];
-const TITLES = {analysis:'Analysis',upload:'Data Upload',standup:'QM Standups',history:'History'};
-
-function switchTab(t, btn) {
-  TABS.forEach(id => document.getElementById('tab-'+id).classList.toggle('active', id===t));
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  document.getElementById('page-title').textContent = TITLES[t]||t;
+// ── Tabs ──
+const TABS=['analysis','upload','standup','history'];
+const TITLES={analysis:'Analysis',upload:'Data Upload',standup:'QM Standups',history:'History'};
+function switchTab(t,btn){
+  TABS.forEach(id=>document.getElementById('tab-'+id).classList.toggle('active',id===t));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('page-title').textContent=TITLES[t]||t;
 }
 
 // ── Char count ──
-function updateCharCount() {
-  const len = document.getElementById('analysis-input').value.length;
-  document.getElementById('char-count').textContent = len + ' chars';
+function updateCharCount(){
+  document.getElementById('char-count').textContent=document.getElementById('analysis-input').value.length+' chars';
 }
 
 // ── Chips ──
-function setPrompt(t) {
-  const ta = document.getElementById('analysis-input');
-  ta.value = t; ta.focus(); updateCharCount();
-}
-function setUploadPrompt(t) {
-  document.getElementById('upload-instructions').value = t;
-  document.getElementById('upload-instructions').focus();
+function setPrompt(t){const ta=document.getElementById('analysis-input');ta.value=t;ta.focus();updateCharCount();}
+function setUploadPrompt(t){document.getElementById('upload-instructions').value=t;document.getElementById('upload-instructions').focus();}
+
+// ── Analysis history ──
+let analysisHistory=[];
+let uploadedFileData=null;
+let uploadedFileName=null;
+
+// ── Call Claude API ──
+async function callClaude(prompt, data=null){
+  const res = await fetch('/api/analyze', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({prompt, data})
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({error:'Server error'}));
+    throw new Error(err.error||'API error');
+  }
+  const json = await res.json();
+  return json.text;
 }
 
 // ── Run analysis ──
-function runAnalysis() {
-  const val = document.getElementById('analysis-input').value.trim();
-  if(!val){ toast('Enter a prompt first'); return; }
-  const notes = document.getElementById('griff-notes').value.trim();
-  const full = val + (notes ? '\n\nGriff context:\n'+notes : '');
-  // ↓ In production: call Anthropic API with full prompt
-  document.getElementById('findings-display').textContent =
-    '[ Preview mode — in the live version Claude will analyze:\n\n'+full+'\n\n…and return findings, charts, and recommendations here. ]';
-  document.getElementById('findings-display').classList.add('has-content');
-  toast('Analysis sent ↗');
+async function runAnalysis(){
+  const val=document.getElementById('analysis-input').value.trim();
+  if(!val){toast('Enter a prompt first');return;}
+  const notes=document.getElementById('griff-notes').value.trim();
+  const fullPrompt = val + (notes?'\n\nGriff context:\n'+notes:'');
+  const btn=document.getElementById('run-btn');
+  const box=document.getElementById('findings-display');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> Analyzing…';
+  box.textContent='Analyzing…';
+  box.classList.add('live');
+  try{
+    const text = await callClaude(fullPrompt);
+    box.textContent=text;
+    toast('Analysis complete');
+    const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    analysisHistory.unshift({title:val.slice(0,70)+(val.length>70?'…':''),date:today,full:text});
+    renderHistory();
+  }catch(e){
+    box.textContent='Error: '+e.message+'\n\nMake sure ANTHROPIC_API_KEY is set in Vercel environment variables.';
+    toast('Error — check API key config');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-player-play"></i> Run Analysis';
+  }
 }
 
-function clearFindings() {
-  document.getElementById('findings-display').textContent = 'Analysis results will appear here after you run a query above.';
-  document.getElementById('findings-display').classList.remove('has-content');
+// ── Upload file ──
+let uploadedFile=null;
+function handleDrag(e){e.preventDefault();document.getElementById('upload-zone').classList.add('drag');}
+function handleDragLeave(){document.getElementById('upload-zone').classList.remove('drag');}
+function handleDrop(e){e.preventDefault();document.getElementById('upload-zone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function handleFile(e){const f=e.target.files[0];if(f)processFile(f);}
+
+function processFile(file){
+  uploadedFile=file;
+  const badge=document.getElementById('upload-badge');
+  document.getElementById('upload-filename').textContent=file.name+' — '+(file.size/1024).toFixed(1)+' KB';
+  badge.classList.add('show');
+  document.getElementById('file-status').textContent=file.name+' ready';
+  toast('File loaded: '+file.name);
+
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=new Uint8Array(e.target.result);
+      const wb=XLSX.read(data,{type:'array'});
+      let csvData='';
+      wb.SheetNames.slice(0,3).forEach(name=>{
+        const ws=wb.Sheets[name];
+        csvData+='Sheet: '+name+'\n'+XLSX.utils.sheet_to_csv(ws).split('\n').slice(0,100).join('\n')+'\n\n';
+      });
+      uploadedFileData=csvData;
+      uploadedFileName=file.name;
+    }catch(err){
+      uploadedFileData='Could not parse file: '+err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function runUploadAnalysis(){
+  if(!uploadedFile){toast('Upload a file first');return;}
+  if(!uploadedFileData){toast('File still loading, try again');return;}
+  const instr=document.getElementById('upload-instructions').value.trim();
+  if(!instr){toast('Add instructions first');return;}
+  const btn=document.getElementById('upload-run-btn');
+  const card=document.getElementById('upload-results-card');
+  const box=document.getElementById('upload-findings');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> Analyzing…';
+  card.style.display='';
+  box.textContent='Analyzing your data…';
+  try{
+    const text=await callClaude(instr, uploadedFileData);
+    box.textContent=text;
+    toast('Analysis complete');
+  }catch(e){
+    box.textContent='Error: '+e.message;
+    toast('Error — check API key config');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-player-play"></i> Analyze File';
+  }
 }
 
 // ── Notes ──
-let analysisHistory = [];
-let notionConnected = false;
-
-function saveNotes() {
-  const notes = document.getElementById('griff-notes').value.trim();
-  if(!notes){ toast('Nothing to save'); return; }
-  const ts = new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  document.getElementById('notes-status').textContent = 'Saved at '+ts;
-  const today = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  analysisHistory.unshift({title:notes.slice(0,72)+(notes.length>72?'…':''), date:today, full:notes});
+function saveNotes(){
+  const notes=document.getElementById('griff-notes').value.trim();
+  if(!notes){toast('Nothing to save');return;}
+  const ts=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  document.getElementById('notes-status').textContent='Saved at '+ts;
+  const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  analysisHistory.unshift({title:notes.slice(0,72)+(notes.length>72?'…':''),date:today,full:notes});
   renderHistory();
   toast('Notes saved');
 }
 
-function pushToStandup() {
-  const notes = document.getElementById('griff-notes').value.trim();
-  if(!notes){ toast('Add notes first'); return; }
-  document.getElementById('standup-notes-display').textContent = notes;
-  document.getElementById('standup-pushed-card').style.display = '';
+function clearFindings(){
+  document.getElementById('findings-display').textContent='Run a query above to populate findings.';
+  document.getElementById('findings-display').classList.remove('live');
+}
+
+function pushToStandup(){
+  const findings=document.getElementById('findings-display').textContent;
+  const notes=document.getElementById('griff-notes').value.trim();
+  const content=(findings&&findings!=='Run a query above to populate findings.'?findings:'')+(notes?'\n\nGriff notes:\n'+notes:'');
+  if(!content.trim()){toast('Nothing to push — run an analysis or add notes first');return;}
+  document.getElementById('standup-content').textContent=content;
+  document.getElementById('standup-content-card').style.display='';
   switchTab('standup');
   document.querySelectorAll('.nav-item')[2].classList.add('active');
   document.querySelectorAll('.nav-item')[0].classList.remove('active');
-  toast('Notes pushed to standup ↗');
+  toast('Pushed to standup ↗');
 }
 
-function pushUploadToStandup() {
-  const content = document.getElementById('upload-findings-display').textContent;
-  if(!content){ toast('No analysis to push'); return; }
-  document.getElementById('standup-notes-display').textContent = content;
-  document.getElementById('standup-pushed-card').style.display = '';
+function pushUploadToStandup(){
+  const content=document.getElementById('upload-findings').textContent;
+  if(!content){toast('No results yet');return;}
+  document.getElementById('standup-content').textContent=content;
+  document.getElementById('standup-content-card').style.display='';
   switchTab('standup');
-  toast('Analysis pushed to standup ↗');
+  toast('Pushed to standup ↗');
 }
 
-// ── History ──
-function renderHistory() {
-  const el = document.getElementById('history-list');
-  if(!analysisHistory.length){
-    el.innerHTML='<p style="font-size:12.5px;color:var(--dl-text-3);padding:.5rem 0">No saved analyses yet.</p>';
-    return;
-  }
-  el.innerHTML = analysisHistory.map(h=>`
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!analysisHistory.length){el.innerHTML='<p style="font-size:12.5px;color:var(--text3);padding:.5rem 0">No saved analyses yet.</p>';return;}
+  el.innerHTML=analysisHistory.map(h=>`
     <div class="history-item">
       <div class="h-icon"><i class="ti ti-chart-line"></i></div>
-      <div>
-        <div class="h-title">${h.title}</div>
-        <div class="h-meta">${notionConnected?'<i class="ti ti-brand-notion" style="font-size:11px;color:var(--dl-purple)"></i> Saved to Notion · ':''} Saved analysis</div>
-      </div>
+      <div><div class="h-title">${h.title}</div><div class="h-meta">Saved analysis</div></div>
       <div class="h-date">${h.date}</div>
     </div>`).join('');
 }
 
-// ── Sample data ──
-function loadSampleData() {
-  const rows = [
-    {ch:'Google Search', spend:'$12,400', leads:'248', cpl:'$50.00', pct:72,  s:'green'},
-    {ch:'Meta',          spend:'$8,200',  leads:'164', cpl:'$50.00', pct:61,  s:'amber'},
-    {ch:'YouTube',       spend:'$3,800',  leads:'54',  cpl:'$70.37', pct:44,  s:'amber'},
-    {ch:'Display',       spend:'$1,600',  leads:'18',  cpl:'$88.89', pct:28,  s:'red'},
-    {ch:'Programmatic',  spend:'$2,100',  leads:'47',  cpl:'$44.68', pct:55,  s:'green'},
-  ];
-  const colorMap={green:'#16a34a',amber:'#d97706',red:'#dc2626'};
-  const labelMap={green:'On Pace',amber:'Watch',red:'Behind'};
-  const pillMap={green:'pill-green',amber:'pill-amber',red:'pill-red'};
+// ── Ping findings pre-load ──
+function loadPingFindings(){
+  const findings=`PING ANALYSIS — BF COMPLIANCE REPORT
+Generated: ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
 
-  document.getElementById('channel-tbody').innerHTML = rows.map(r=>`
+EXECUTIVE SUMMARY
+The BF (Bid Frequency) algorithm is not enforcing configured bid frequency settings across any source in QM. Across 3.81M pings, only 26.9% of expected bids were placed — meaning 1.24M calls that should have been bid on were skipped. This is a systemic platform-level failure, not a per-source issue.
+
+KEY FINDINGS
+
+1. SYSTEM-WIDE FAILURE — 73.1% of expected bids never placed
+   Total pings: 3,807,332 | Expected bids: 1,691,926 | Actual bids: 455,805
+   Calls missed: 1,236,122 (73.1% of what BF settings mandated)
+
+2. RATEQ — Largest absolute miss (420,969 calls)
+   BF setting: 46% | Actual bid rate: 6.0% | Gap: 40 points
+   At 1.55M pings, even a moderate BF gap compounds to massive volume loss.
+
+3. ADLNT — Worst rate gap among high-volume sources (69 points)
+   BF setting: 78% | Actual bid rate: 8.6% | Gap: 69 points
+   278K pings × 69-point gap = 174,760 missed calls.
+
+4. WISDO — Second largest absolute miss (245,510 calls)
+   BF setting: 51% | Actual bid rate: 6.8% | Gap: 45 points
+
+5. VPMOP & HLTHC — Critical gap percentage (71% and 73%)
+   Lower volume but highest rate gaps — nearly no bidding despite BF settings.
+
+6. SKYLB — Only source performing at a reasonable level
+   BF: 69% | Actual: 40.4% — still a gap but the closest to working correctly.
+
+7. No source with BF = 0 showed unexpected bids (correct behavior confirmed).
+
+RECOMMENDED ACTIONS
+• Immediate: Audit the random number generator logic in the Datalot BF JSON control — compare expected distribution to actual distribution per source.
+• Priority fix order: RATEQ → WISDO → ADLNT → SCALA → DIGIP (by volume impact).
+• Verify BF JSON values are being read correctly by the algo — check for parsing errors or state-level overrides nullifying settings.
+• Run a controlled test with BF set to 100% on a single low-volume source to isolate whether the issue is the BF value read or the random comparison logic.`;
+
+  document.getElementById('findings-display').textContent=findings;
+  document.getElementById('findings-display').classList.add('live');
+  toast('Ping findings loaded');
+}
+
+// ── Build source table ──
+function buildSourceTable(){
+  const sources=[
+    {s:'RATEQ',bf:46,pings:1547596,exp:538376,bids:117407,rate:6.0,gap:40.0,missed:420969,sev:'High'},
+    {s:'WISDO',bf:51,pings:656691,exp:320130,bids:74620,rate:6.8,gap:44.6,missed:245510,sev:'High'},
+    {s:'ADLNT',bf:78,pings:278489,exp:225339,bids:50579,rate:8.6,gap:69.4,missed:174760,sev:'Critical'},
+    {s:'SCALA',bf:44,pings:491626,exp:226922,bids:89325,rate:17.1,gap:27.4,missed:137597,sev:'High'},
+    {s:'DIGIP',bf:43,pings:219850,exp:116758,bids:34151,rate:9.1,gap:34.1,missed:82607,sev:'High'},
+    {s:'INSCO',bf:51,pings:116278,exp:54936,bids:13859,rate:8.4,gap:42.7,missed:41077,sev:'High'},
+    {s:'UABIN',bf:48,pings:216466,exp:73306,bids:32614,rate:7.4,gap:40.5,missed:40692,sev:'High'},
+    {s:'ENGCX',bf:40,pings:94026,exp:45740,bids:6879,rate:7.4,gap:32.2,missed:38861,sev:'Moderate'},
+    {s:'RATEQ SOC',bf:51,pings:47465,exp:19722,bids:4438,rate:10.7,gap:40.1,missed:15284,sev:'High'},
+    {s:'PARGN',bf:43,pings:51808,exp:21424,bids:7441,rate:18.7,gap:23.8,missed:13983,sev:'Moderate'},
+    {s:'QUOTV',bf:48,pings:28415,exp:14399,bids:5604,rate:14.6,gap:33.1,missed:8795,sev:'Moderate'},
+    {s:'COBRA',bf:64,pings:10124,exp:8036,bids:2968,rate:19.4,gap:44.8,missed:5068,sev:'High'},
+    {s:'SKYLB',bf:69,pings:25528,exp:15830,bids:11659,rate:40.4,gap:28.7,missed:4171,sev:'Moderate'},
+    {s:'R2MED',bf:55,pings:5803,exp:3462,bids:691,rate:17.0,gap:38.1,missed:2771,sev:'Moderate'},
+    {s:'HLGSL',bf:46,pings:9698,exp:2294,bids:585,rate:5.5,gap:40.5,missed:1709,sev:'High'},
+    {s:'HIWMG',bf:79,pings:1775,exp:1531,bids:761,rate:25.6,gap:53.4,missed:770,sev:'High'},
+    {s:'VPMOP',bf:87,pings:1064,exp:965,bids:236,rate:16.1,gap:70.6,missed:729,sev:'Critical'},
+    {s:'PALOM',bf:49,pings:2683,exp:1118,bids:489,rate:11.2,gap:37.6,missed:629,sev:'Moderate'},
+    {s:'REVRS',bf:92,pings:852,exp:852,bids:663,rate:48.5,gap:43.7,missed:189,sev:'High'},
+    {s:'HLTHC',bf:90,pings:60,exp:50,bids:23,rate:17.3,gap:72.7,missed:27,sev:'Critical'},
+    {s:'GOLDM',bf:77,pings:1035,exp:736,bids:813,rate:60.4,gap:16.5,missed:-76,sev:'OK'},
+  ];
+
+  const sevMap={Critical:'pill-red',High:'pill-amber',Moderate:'pill-cyan',OK:'pill-green'};
+  const colorMap={Critical:'#E24B4A',High:'#d97706',Moderate:'#29b6d8',OK:'#16a34a'};
+
+  document.getElementById('source-tbody').innerHTML=sources.map(r=>`
     <tr>
-      <td style="font-weight:600;color:var(--dl-text)">${r.ch}</td>
-      <td class="num">${r.spend}</td>
-      <td class="num">${r.leads}</td>
-      <td class="num">${r.cpl}</td>
+      <td style="font-weight:600;color:var(--text)">${r.s}</td>
+      <td class="num">${r.bf}%</td>
+      <td class="num">${r.pings.toLocaleString()}</td>
+      <td class="num">${r.exp.toLocaleString()}</td>
+      <td class="num">${r.bids.toLocaleString()}</td>
+      <td class="num">${r.rate}%</td>
       <td>
         <div class="bar-wrap">
-          <div class="bar-track"><div class="bar-fill" style="width:${r.pct}%;background:${colorMap[r.s]}"></div></div>
-          <span class="bar-pct">${r.pct}%</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(r.gap,100)}%;background:${colorMap[r.sev]}"></div></div>
+          <span class="bar-pct">${r.gap.toFixed(1)}%</span>
         </div>
       </td>
-      <td><span class="pill ${pillMap[r.s]}">${labelMap[r.s]}</span></td>
+      <td class="num">${r.missed.toLocaleString()}</td>
+      <td><span class="pill ${sevMap[r.sev]}">${r.sev}</span></td>
     </tr>`).join('');
-
-  // Update KPIs
-  document.getElementById('m-spend').textContent='$28.1K';
-  document.getElementById('m-leads').textContent='531';
-  document.getElementById('m-cpl').textContent='$52.92';
-  document.getElementById('m-cvr').textContent='4.1%';
-
-  document.getElementById('d-spend').textContent='↑ 8% WoW';
-  document.getElementById('d-spend').className='kpi-delta up';
-  document.getElementById('d-leads').textContent='↑ 11% WoW';
-  document.getElementById('d-leads').className='kpi-delta up';
-  document.getElementById('d-cpl').textContent='↑ +$2.40 WoW';
-  document.getElementById('d-cpl').className='kpi-delta dn';
-  document.getElementById('kpi-cpl-card').className='kpi-card negative';
-  document.getElementById('d-cvr').textContent='↑ +0.3pts';
-  document.getElementById('d-cvr').className='kpi-delta up';
-  document.getElementById('kpi-leads-card').className='kpi-card positive';
-
-  toast('Sample data loaded');
 }
 
-// ── File upload ──
-let uploadedFile = null;
+// ── Charts ──
+function buildCharts(){
+  const sources=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN','QUOTV','COBRA','SKYLB','R2MED','HLGSL','HIWMG','VPMOP','PALOM','REVRS','HLTHC','GOLDM'];
+  const bfSet=[46,51,78,44,43,51,48,40,51,43,48,64,69,55,46,79,87,49,92,90,77];
+  const actual=[6.0,6.8,8.6,17.1,9.1,8.4,7.4,7.4,10.7,18.7,14.6,19.4,40.4,17.0,5.5,25.6,16.1,11.2,48.5,17.3,60.4];
 
-function handleDrag(e){ e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
-function handleDragLeave(e){ document.getElementById('upload-zone').classList.remove('drag'); }
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('drag');
-  const file = e.dataTransfer.files[0];
-  if(file) processFile(file);
-}
-function handleFile(e){ const file = e.target.files[0]; if(file) processFile(file); }
+  new Chart(document.getElementById('chart-bf'),{
+    type:'bar',
+    data:{labels:sources,datasets:[
+      {label:'BF setting %',data:bfSet,backgroundColor:'#B5D4F4',borderRadius:2},
+      {label:'Actual bid rate %',data:actual,backgroundColor:'#E24B4A',borderRadius:2}
+    ]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>v+'%'},max:100},
+        y:{ticks:{font:{size:10,family:'IBM Plex Mono'}},grid:{display:false}}
+      }
+    }
+  });
 
-function processFile(file){
-  uploadedFile = file;
-  const badge = document.getElementById('upload-badge');
-  document.getElementById('upload-filename').textContent = file.name + ' — ' + (file.size/1024).toFixed(1) + ' KB';
-  badge.classList.add('show');
-  document.getElementById('file-status').textContent = file.name + ' ready';
-  toast('File loaded: ' + file.name);
-}
+  const top10Sources=['RATEQ','WISDO','ADLNT','SCALA','DIGIP','INSCO','UABIN','ENGCX','RATEQ SOC','PARGN'];
+  const top10Missed=[420969,245510,174760,137597,82607,41077,40692,38861,15284,13983];
+  const colors=top10Missed.map(v=>v>200000?'#E24B4A':v>80000?'#EF9F27':'#85B7EB');
 
-function runUploadAnalysis(){
-  if(!uploadedFile){ toast('Upload a file first'); return; }
-  const instr = document.getElementById('upload-instructions').value.trim();
-  const prompt = instr || 'Analyze this media data file and surface key findings.';
-  // ↓ In production: read file, call Claude API with data + prompt
-  const card = document.getElementById('upload-findings-card');
-  document.getElementById('upload-findings-display').textContent =
-    '[ Preview mode — in the live version Claude will:\n\n1. Parse '+uploadedFile.name+'\n2. Apply your instructions: "'+prompt+'"\n3. Return findings in text and generate charts where the data warrants it\n\nConnect the Anthropic API key in the deployment to activate. ]';
-  card.style.display = '';
-  toast('Analysis submitted ↗');
-}
-
-// ── Notion ──
-function connectNotion(){
-  // In production: OAuth flow to Notion
-  notionConnected = true;
-  document.getElementById('notion-connected').classList.add('show');
-  document.getElementById('notion-connect-btn').style.display='none';
-  document.getElementById('notion-status-text').textContent = 'Connected — analyses and standups will be logged automatically';
-  document.getElementById('notion-history-badge').classList.add('show');
-  toast('Notion connected ✓');
-}
-
-function saveToNotion(type){
-  if(!notionConnected){ toast('Connect Notion first'); return; }
-  // In production: POST to Notion API
-  toast('Saved to Notion database ↗');
-}
-
-// ── Standup builder ──
-function openStandupBuilder(){
-  const msg = 'Griff here — for the QM Standup section I want: ';
-  alert('Hi Griff! Tell us what you want in your standup view — which metrics, layout, talking points format, and anything else. We\'ll build it out for your weekly QM team calls.');
+  new Chart(document.getElementById('chart-missed'),{
+    type:'bar',
+    data:{labels:top10Sources,datasets:[{data:top10Missed,backgroundColor:colors,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' calls missed'}}},
+      scales:{
+        x:{ticks:{font:{size:10,family:'IBM Plex Mono'},maxRotation:40,autoSkip:false},grid:{display:false}},
+        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:10},callback:v=>(v/1000).toFixed(0)+'K'}}
+      }
+    }
+  });
 }
 
 // ── Toast ──
 function toast(msg){
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 2300);
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2300);
 }
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded',()=>{
+  buildCharts();
+  buildSourceTable();
+  loadPingFindings();
+});
 </script>
 </body>
 </html>
