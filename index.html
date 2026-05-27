@@ -542,35 +542,44 @@ const COLOR_MAP={
   multi:['#29b6d8','#E24B4A','#d97706','#16a34a','#7c3aed','#85B7EB','#F4A261','#2A9D8F']
 };
 
-function renderDynamicCharts(charts, label=''){
-  // Destroy old dynamic instances
-  dynamicChartInstances.forEach(c=>c.destroy());
-  dynamicChartInstances=[];
-
+function renderDynamicCharts(charts, label='', append=false){
   const area=document.getElementById('dynamic-charts');
 
   if(!charts||charts.length===0){
-    // Restore default charts
-    area.innerHTML=`<div class="chart-grid" id="default-charts">
-      <div class="chart-card"><div class="chart-card-title">BF setting vs actual bid rate by source</div><div style="position:relative;height:300px"><canvas id="chart-bf"></canvas></div>
-        <div class="legend"><span class="legend-item"><span class="legend-swatch" style="background:#B5D4F4"></span>BF setting</span><span class="legend-item"><span class="legend-swatch" style="background:#E24B4A"></span>Actual bid rate</span></div>
-      </div>
-      <div class="chart-card"><div class="chart-card-title">Calls missed by source (top 10)</div><div style="position:relative;height:300px"><canvas id="chart-missed"></canvas></div></div>
-    </div>`;
-    buildDefaultCharts();
+    if(!append){
+      dynamicChartInstances.forEach(c=>c.destroy());
+      dynamicChartInstances=[];
+      area.innerHTML=`<div class="chart-grid" id="default-charts">
+        <div class="chart-card"><div class="chart-card-title">BF setting vs actual bid rate by source</div><div style="position:relative;height:300px"><canvas id="chart-bf"></canvas></div>
+          <div class="legend"><span class="legend-item"><span class="legend-swatch" style="background:#B5D4F4"></span>BF setting</span><span class="legend-item"><span class="legend-swatch" style="background:#E24B4A"></span>Actual bid rate</span></div>
+        </div>
+        <div class="chart-card"><div class="chart-card-title">Calls missed by source (top 10)</div><div style="position:relative;height:300px"><canvas id="chart-missed"></canvas></div></div>
+      </div>`;
+      buildDefaultCharts();
+    }
     return;
   }
 
+  const prefix='g'+(Date.now()%99999);
   const gridClass=charts.length===1?'chart-grid single':'chart-grid';
   const sectionLabel=label?`<div class="chart-section-label">📊 Charts — ${label}</div>`:'';
-
-  area.innerHTML=sectionLabel+`<div class="${gridClass}" id="dynamic-chart-grid">`+
-    charts.map((_,i)=>`<div class="chart-card"><div class="chart-card-title" id="ctitle-${i}"></div><div style="position:relative;height:${charts.length===1?'340px':'300px'}"><canvas id="dchart-${i}"></canvas></div><div class="legend" id="clegend-${i}"></div></div>`).join('')+
+  const newBlock=sectionLabel+`<div class="${gridClass}">`+
+    charts.map((_,i)=>`<div class="chart-card"><div class="chart-card-title" id="${prefix}-ctitle-${i}"></div><div style="position:relative;height:${charts.length===1?'340px':'300px'}"><canvas id="${prefix}-dchart-${i}"></canvas></div><div class="legend" id="${prefix}-clegend-${i}"></div></div>`).join('')+
   '</div>';
 
+  if(append){
+    const defCharts=area.querySelector('#default-charts');
+    if(defCharts)defCharts.remove();
+    area.insertAdjacentHTML('beforeend',newBlock);
+  } else {
+    dynamicChartInstances.forEach(c=>c.destroy());
+    dynamicChartInstances=[];
+    area.innerHTML=newBlock;
+  }
+
   charts.forEach((c,i)=>{
-    document.getElementById('ctitle-'+i).textContent=c.title||'';
-    const ctx=document.getElementById('dchart-'+i);
+    document.getElementById(`${prefix}-ctitle-`+i).textContent=c.title||'';
+    const ctx=document.getElementById(`${prefix}-dchart-`+i);
     if(!ctx)return;
 
     const isHorizontal=c.type==='horizontalBar';
@@ -606,7 +615,7 @@ function renderDynamicCharts(charts, label=''){
 
     // Legend
     if(datasets.length>1){
-      document.getElementById('clegend-'+i).innerHTML=datasets.map((ds,di)=>`<span class="legend-item"><span class="legend-swatch" style="background:${Array.isArray(ds.backgroundColor)?ds.backgroundColor[0]:ds.backgroundColor}"></span>${ds.label}</span>`).join('');
+      document.getElementById(`${prefix}-clegend-`+i).innerHTML=datasets.map((ds,di)=>`<span class="legend-item"><span class="legend-swatch" style="background:${Array.isArray(ds.backgroundColor)?ds.backgroundColor[0]:ds.backgroundColor}"></span>${ds.label}</span>`).join('');
     }
   });
 }
@@ -664,8 +673,8 @@ async function runFollowUp(){
     currentAnalysisContext=appended;
     // Render new charts for this follow-up
     if(result.charts&&result.charts.length>0){
-      currentCharts=result.charts;
-      renderDynamicCharts(result.charts, val.slice(0,50));
+      currentCharts=[...currentCharts,...result.charts];
+      renderDynamicCharts(result.charts, val.slice(0,60), true);
     }
     document.getElementById('followup-input').value='';
     document.getElementById('save-banner').classList.remove('show');
@@ -682,6 +691,7 @@ function clearFindings(){
   document.getElementById('save-banner').classList.remove('show');
   document.getElementById('analysis-source-label').textContent='';
   currentAnalysisContext='';currentCharts=[];
+  dynamicChartInstances.forEach(c=>c.destroy());dynamicChartInstances=[];
   renderDynamicCharts([]);
 }
 
