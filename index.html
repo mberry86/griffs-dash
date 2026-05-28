@@ -589,8 +589,12 @@ function renderDynamicCharts(charts, label='', append=false){
       let bg;
       if(ds.color==='multi'){
         bg=c.labels.map((_,li)=>COLOR_MAP.multi[li%COLOR_MAP.multi.length]);
-      }else{
-        bg=COLOR_MAP[ds.color]||COLOR_MAP.blue;
+      } else if(COLOR_MAP[ds.color]){
+        bg=COLOR_MAP[ds.color];
+      } else if(ds.color&&ds.color.startsWith('#')){
+        bg=ds.color;
+      } else {
+        bg=c.datasets.length>1?COLOR_MAP.multi[di%COLOR_MAP.multi.length]:COLOR_MAP.blue;
       }
       return{label:ds.label||'',data:ds.data,backgroundColor:bg,borderRadius:3};
     });
